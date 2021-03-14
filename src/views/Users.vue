@@ -4,6 +4,24 @@ div
 		Menu
 
 	div.main
+		span.subtitle(v-if="friendrequests.length") Requests
+		hr.divider(v-if="friendrequests.length")
+		ul.list
+			li.item(v-for="friendrequest in friendrequests")
+				.photo
+					span {{ friendrequest.friend_id.name[0] | capitalize }}
+				.data
+					span {{ friendrequest.friend_id.name | capitalize }} {{ friendrequest.friend_id.lastname | capitalize }}
+					span {{ friendrequest.friend_id.age }} years old
+					span {{ friendrequest.friend_id.country | capitalize }}
+					.actions
+						a.action(@click="friendRequestAccept(friendrequest.id)") 
+							i(class="fa fa-user-check")
+						a.action(@click="store(user.id)") 
+							i(class="fa fa-comment-alt")
+
+		span.subtitle Users
+		hr.divider
 		ul.list
 			li.item(v-for="user in users" v-if="user.id != me_id")
 				.photo
@@ -42,11 +60,12 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 export default class Users extends Vue 
 {
 	users: any = []
+	friendrequests: any = []
 	friendSet!: (value: number) => void
 
 	async created()
 	{
-		this.$apollo.query({
+		await this.$apollo.query({
 			query: gql(`query
 			{
 				users(page: 1 first: 10)
@@ -63,6 +82,27 @@ export default class Users extends Vue
 			}`)
 		})
 		.then(res => this.users = res.data.users.data)
+		.catch(err => console.log(err))
+
+		await this.$apollo.query({
+			query: gql(`query
+			{
+			  friendrequests(page: 1)
+			  {
+			    id
+			    friend_id
+			    {
+			      id
+			      name
+			      lastname
+			      country
+			      age
+			    }
+			  }
+			}`)
+		})
+		.then(res => this.friendrequests = res.data.friendrequests)
+		.catch(err => console.log(err))
 	}
 
 	store(id: number)
@@ -80,6 +120,21 @@ export default class Users extends Vue
 			}`),
 			variables: {
 				friend_id: friend_id
+			}
+		})
+		.then(res => console.log(res))
+		.catch(err => console.log(err))
+	}
+
+	async friendRequestAccept(id: number)
+	{
+		this.$apollo.mutate({
+			mutation: gql(`mutation($id: ID!)
+			{
+				friendRequestAccept(id: $id)
+			}`),
+			variables: {
+				id: id
 			}
 		})
 		.then(res => console.log(res))
@@ -106,8 +161,22 @@ export default class Users extends Vue
 .main
 	width: 100vw
 	height: 100vh
-	padding-bottom: 70px
+	padding: 10px 20px 70px 20px
 	box-sizing: border-box
+	display: flex
+	flex-direction: column
+	justify-content: flex-start
+	align-items: center
+
+.subtitle
+	align-self: flex-start
+	color: #068DDA
+
+.divider
+	width: 100%
+	height: 2px
+	background-color: #068DDA
+	border: 0px
 
 .list
 	width: 100%
@@ -118,7 +187,7 @@ export default class Users extends Vue
 	list-style: none
 	overflow-y: scroll
 	overflow-x: hidden
-	padding: 17px 7px 70px 7px
+	padding: 7px 7px 70px 7px
 	box-sizing: border-box
 
 .item

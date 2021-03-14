@@ -78,7 +78,7 @@ export default class Conversations extends Vue
 		.then(res => this.conversations = res.data.conversations)
 		.catch(err => console.log(err))
 
-		if (!this.$store.state.friend_id)
+		if (!this.$store.state.friend_id && this.conversations.length)
 		{
 			this.friendSet(this.conversations[0].friend_id.id)
 			this.friend_id = this.conversations[0].friend_id.id
@@ -86,11 +86,12 @@ export default class Conversations extends Vue
 		else
 			this.friend_id = this.$store.state.friend_id
 
-		this.conversations.map((item: any) => 
-		{
-			if (item.friend_id.id == this.$store.state.friend_id)
-				this.messages = item.messages
-		})
+		if (this.$store.state.friend_id)
+			this.conversations.map((item: any) => 
+			{
+				if (item.friend_id.id == this.$store.state.friend_id)
+					this.messages = item.messages
+			})
 	}
 
 	async mounted()

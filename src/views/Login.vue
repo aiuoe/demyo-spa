@@ -71,7 +71,7 @@ export default class Login extends Vue
 		}
 
 		await axios.post(`${process.env.VUE_APP_API_URL}/api/auth/signup`, params)
-		.then(res => this.$router.push({path: '/'}))
+		.then(res => this.show())
 		.catch(err => console.log(err))
 	}
 }
