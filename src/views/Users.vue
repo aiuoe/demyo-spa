@@ -1,0 +1,189 @@
+<template lang="pug">
+div
+	div.menu
+		Menu
+
+	div.main
+		ul.list
+			li.item(v-for="user in users" v-if="user.id != me_id")
+				.photo
+					span {{ user.name[0] | capitalize }}
+				.data
+					span {{ user.name | capitalize }} {{ user.lastname | capitalize }}
+					span {{ user.age }} years old
+					span {{ user.country | capitalize }}
+					.actions
+						a.action(@click="sendFriendRequest(user.id)") 
+							i(class="fa fa-user-plus")
+						a.action(@click="store(user.id)") 
+							i(class="fa fa-comment-alt")
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import axios from 'axios'
+import Menu from '@/components/Menu.vue'
+import gql from 'graphql-tag';
+import { capitalize } from '@/modules/filter'
+import { mapState, mapActions, mapGetters } from 'vuex'
+
+@Component({
+	components: { Menu },
+	filters: {capitalize: capitalize},
+	methods:
+	{
+		...mapActions(['friendSet'])
+	},
+	computed:
+	{
+		...mapGetters(['me_id'])
+	}
+})
+export default class Users extends Vue 
+{
+	users: any = []
+	friendSet!: (value: number) => void
+
+	async created()
+	{
+		this.$apollo.query({
+			query: gql(`query
+			{
+				users(page: 1 first: 10)
+			  {
+			    data
+			    {
+			      id
+			      name
+			      lastname
+			      country
+			      age
+			    }
+			  }
+			}`)
+		})
+		.then(res => this.users = res.data.users.data)
+	}
+
+	store(id: number)
+	{
+		this.friendSet(id)
+		this.$router.push('conversations').catch(err => err)
+	}
+
+	async sendFriendRequest(friend_id: number)
+	{
+		this.$apollo.mutate({
+			mutation: gql(`mutation($friend_id: ID!)
+			{
+				friendRequest(friend_id: $friend_id)
+			}`),
+			variables: {
+				friend_id: friend_id
+			}
+		})
+		.then(res => console.log(res))
+		.catch(err => console.log(err))
+	}
+
+	router(path: string)
+	{
+		this.$router.push({path: path}).catch(err => err)
+	}
+
+}
+</script>
+
+<style scoped lang="sass">
+.menu
+	position: fixed
+	bottom: 0px
+	left: 0px
+	width: 100vw
+	height: 70px
+	background-color: #068DDA
+
+.main
+	width: 100vw
+	height: 100vh
+	padding-bottom: 70px
+	box-sizing: border-box
+
+.list
+	width: 100%
+	display: flex
+	flex-direction: column
+	justify-content: space-evenly
+	align-items: center
+	list-style: none
+	overflow-y: scroll
+	overflow-x: hidden
+	padding: 17px 7px 70px 7px
+	box-sizing: border-box
+
+.item
+	width: 90%
+	height: 100px
+	margin-bottom: 7px
+	display: flex
+	border: 1px solid lightgray
+
+.photo
+	width: 30%
+	height: 100%
+	display: flex
+	justify-content: center
+	align-items: center
+
+	span
+		width: 100%
+		height: 100%
+		background-color: #FE7064
+		font-size: 55px
+		color: white
+		display: flex
+		justify-content: center
+		align-items: center
+
+.data
+	width: 70%
+	height: 100%
+	padding: 10px
+	box-sizing: border-box
+	overflow: hidden
+	display: flex
+	flex-direction: column
+	justify-content: center
+	align-items: flex-start
+
+.actions
+	width: 100%
+	height: 30px
+	display: flex
+	justify-content: space-evenly
+	align-items: center
+
+	.action
+		width: 45%
+		height: 100%
+		display: flex
+		justify-content: center
+		align-items: center
+		font-size: 20px
+		text-decoration: none
+	
+		.fa
+			color: #1490DF
+
+@media screen and (min-width: 768px)
+	.menu
+		top: 0
+		width: 70px
+		height: 100vh
+
+@media screen and (min-width: 1024px)
+
+@media screen and (min-width: 1280px)
+
+
+</style>
