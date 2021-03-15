@@ -116,6 +116,7 @@ export default class Conversations extends Vue
     }`)})
     obs.subscribe({
       next: (data: any) => { 
+      	console.log(data)
       	this.conversations.map((item: any) => 
       	{
       		if (item.id == data.data.messageUpsert.conversation_id.id)
@@ -191,7 +192,7 @@ export default class Conversations extends Vue
 		})
 		.then(res => {
 			this.conversations.upsert(res.data.messageUpsert.conversation_id)
-			this.messages.push(res.data.messageUpsert)
+			this.messages = this.conversations.get(res.data.messageUpsert.conversation_id.id).messages
 			this.message = ''
 		})
 		.catch(err => console.log(err))
