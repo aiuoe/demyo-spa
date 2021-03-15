@@ -2,14 +2,17 @@
 nav.nav
   ul(class="list")
     li(class="item")
-      a(@click="router('dashboard')" class="link")
-        i(class="fa fa-home")
-    li(class="item")
       a(@click="router('users')" class="link")
         i(class="fa fa-users")
     li(class="item")
       a(@click="router('conversations')" class="link")
         i(class="fa fa-comments")
+    li(class="item")
+      a(@click="router('dashboard')" class="link")
+        i(class="fa fa-home")
+    li(class="item")
+      a(@click="router('notifications')" class="link")
+        i(class="fa fa-bell")
     li(class="item")
       a(@click="logout" class="link")
         i(class="fa fa-sign-out-alt")
@@ -17,9 +20,10 @@ nav.nav
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { mapState, mapActions } from 'vuex'
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
+import axios from 'axios'
 
 @Component({
   methods:
@@ -51,9 +55,16 @@ export default class Menu extends Vue
     this.$router.push({path: path}).catch(err => err)
   }
 
-  logout()
+  async logout()
   {
-
+    return await axios
+    .post(`${process.env.VUE_APP_API_URL}/api/auth/logout`, {}, {"headers": {"Authorization": `Bearer ${window.localStorage.getItem('token')}`}})
+    .then(res => 
+    {
+      window.localStorage.clear()
+      this.$router.push({ path: '/' })
+    })
+    .catch(err => console.log(err))
   }
 }
 </script>

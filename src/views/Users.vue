@@ -105,6 +105,33 @@ export default class Users extends Vue
 		.catch(err => console.log(err))
 	}
 
+	async mounted()
+	{
+    const obs = this.$apollo.subscribe({
+    query: gql(`subscription
+      FriendRequest
+      {
+        friendRequest
+        {
+        	id
+          friend_id
+          {
+          	id
+          	name
+          	lastname
+          	country
+          	age
+          }
+        }
+    }`)})
+    obs.subscribe({
+      next: (data: any) => {
+      	this.friendrequests.push(data.data.friendRequest)
+      },
+      error: (error: any) => console.log(error)
+    })
+	}
+
 	store(id: number)
 	{
 		this.friendSet(id)
@@ -117,6 +144,17 @@ export default class Users extends Vue
 			mutation: gql(`mutation($friend_id: ID!)
 			{
 				friendRequest(friend_id: $friend_id)
+				{
+					id
+					friend_id
+					{
+						id
+						name
+						lastname
+						country
+						age
+					}
+				}
 			}`),
 			variables: {
 				friend_id: friend_id
@@ -137,7 +175,7 @@ export default class Users extends Vue
 				id: id
 			}
 		})
-		.then(res => console.log(res))
+		.then(res => this.friendrequests.delete(id))
 		.catch(err => console.log(err))
 	}
 

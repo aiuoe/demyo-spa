@@ -124,7 +124,6 @@ export default class Conversations extends Vue
       },
       error: (error: any) => console.log(error)
     })
-
 	}
 
 	async updated()
@@ -160,7 +159,21 @@ export default class Conversations extends Vue
 			    id
 			    conversation_id
 			    {
-			      id
+				    id
+				    friend_id
+				    {
+				      id
+				      name
+				    }
+				    messages
+				    {
+				      id
+				      user_id
+				      {
+				        id
+				      }
+				      message
+				    }
 			    }
 			    user_id
 			    {
@@ -177,11 +190,8 @@ export default class Conversations extends Vue
 			}
 		})
 		.then(res => {
-			this.conversations.map((item: any) =>
-			{
-				if (item.id == res.data.messageUpsert.conversation_id.id)
-					item.messages.push(res.data.messageUpsert)
-			})
+			this.conversations.upsert(res.data.messageUpsert.conversation_id)
+			this.messages.push(res.data.messageUpsert)
 			this.message = ''
 		})
 		.catch(err => console.log(err))
