@@ -24,16 +24,18 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { mapState, mapActions } from 'vuex'
 import gql from 'graphql-tag'
 import axios from 'axios'
+import '@/modules/array'
 
 @Component({
   methods:
   {
-    ...mapActions(['meSet'])
+    ...mapActions(['meSet', 'conversationAction'])
   }
 })
 export default class Menu extends Vue 
 {
   meSet!: (value: number) => void
+  conversationAction!: (value: any) => void
 
   async created()
   {
@@ -48,6 +50,75 @@ export default class Menu extends Vue
     })
     .then(res => this.meSet(res.data.me.id))
     .catch(err => console.log(err))
+
+    await this.$apollo.query({
+      query: gql(`query
+      {
+        conversations(page:1)
+        {
+          id
+          friend_id
+          {
+            id
+            name
+          }
+          messages
+          {
+            id
+            conversation_id
+            {
+             id
+            }
+            user_id
+            {
+              id
+            }
+            message
+          }
+        }
+      }`)
+    })
+    .then(res => this.conversationAction(res.data.conversations))
+    .catch(err => console.log(err))
+  }
+
+  async mounted()
+  {
+    const obs = this.$apollo.subscribe({
+    query: gql(`subscription
+      MessageUpsert
+      {
+        messageUpsert
+        {
+          id
+          conversation_id
+          {
+           id
+          }
+           user_id
+           {
+             id
+           }
+          message
+        }
+    }`)})
+    obs.subscribe({
+      next: (data: any) => { 
+        console.log(data)
+        this.$store.state.conversations.map((conversation: any) =>
+        {
+          if(conversation.id == data.data.messageUpsert.conversation_id.id)
+            conversation.messages.map((message: any) => 
+            {
+              if(message.id == data.data.messageUpsert.id)
+                message.message = data.data.messageUpsert.message
+              else
+                conversation.messages.push(data.data.messageUpsert)
+            })
+        })
+      },
+      error: (error: any) => console.log(error)
+    })
   }
 
   router(path: string)

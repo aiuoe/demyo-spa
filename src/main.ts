@@ -28,7 +28,7 @@ const pusherLink = new PusherLink({
     authEndpoint: `${process.env.VUE_APP_API_URL}/graphql/subscriptions/auth`,
     auth: {
       headers: {
-        Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTYxMjQ3MTk3NiwiZXhwIjoxNjE1MDYzOTc2LCJuYmYiOjE2MTI0NzE5NzYsImp0aSI6IkRpR09nd0dET2xRaTNZdGgiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.8jU7PwD1hctJvoYo17knfXE3x4cIe4__XFIs4KH2jtU",
+        Authorization: `Bearer ${window.localStorage.getItem('token')}`,
       },
     },
   }),

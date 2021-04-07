@@ -9,9 +9,9 @@ interface Array<T>
 
 Array.prototype.upsert = function (item: any) {
 	if (this[this.indexOf(this.find((i: any) => i.id == item.id))])
-		this[this.indexOf(this.find((i: any) => i.id == item.id))] = item
+		return this[this.indexOf(this.find((i: any) => i.id == item.id))] = item
 	else
-		this.push(item) 
+		return this.push(item) 
 }
 
 Array.prototype.delete = function (id: number): void

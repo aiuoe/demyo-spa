@@ -6,12 +6,17 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
 		me_id: 0,
-		friend_id: 0
+		friend_id: 0,
+    conversations: null
   },
   getters: {
     me_id: state => 
     {
       return state.me_id
+    },
+    conversations: state => 
+    {
+      return state.conversations
     }
   },
   mutations: {
@@ -22,7 +27,11 @@ export default new Vuex.Store({
   	friendSet(state, value)
   	{
   		state.friend_id = value
-  	}
+  	},
+    conversationMutation(state, value)
+    {
+      state.conversations = value
+    }
   },
   actions: {
   	async meSet({commit}, value)
@@ -32,7 +41,11 @@ export default new Vuex.Store({
    	async friendSet({commit}, value)
   	{
 			commit('friendSet', value)  		
-  	}
+  	},
+    async conversationAction({commit}, value)
+    {
+      commit('conversationMutation', value)
+    }
   },
   modules: {
   }

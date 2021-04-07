@@ -8,7 +8,7 @@ div
 			li.item-conversations(v-for="conversation in conversations")
 				a(@click="select(conversation.friend_id.id)")
 					span {{ conversation.friend_id.name[0] | capitalize }}
-		ul.list.list-messages
+		ul.list.list-messages(v-if="messages")
 			li.item-messages(v-for="message in messages")
 				span(v-if="message.user_id.id == me_id" class="message right") {{ message.message }}
 				span(v-else class="message left") {{ message.message }}
@@ -38,94 +38,55 @@ import '@/modules/array'
 	},
 	computed: 
 	{
-		...mapGetters(['me_id'])
+		...mapGetters(['me_id', 'conversations'])
 	}
 })
 export default class Conversations extends Vue 
 {
 	friendSet!: (value: number) => void
-	conversations: any = []
-	messages: any = []
 	message: string = ''
+	messages: any = []
 	friend_id: number = 0
 	id: number = 0
 
 	async created()
 	{
-		await this.$apollo.query({
-			query: gql(`query
-			{
-			  conversations(page:1)
-			  {
-			    id
-			    friend_id
-			    {
-			      id
-			      name
-			    }
-			    messages
-			    {
-			      id
-			      user_id
-			      {
-			        id
-			      }
-			      message
-			    }
-			  }
-			}`)
-		})
-		.then(res => this.conversations = res.data.conversations)
-		.catch(err => console.log(err))
-
-		if (!this.$store.state.friend_id && this.conversations.length)
-		{
-			this.friendSet(this.conversations[0].friend_id.id)
-			this.friend_id = this.conversations[0].friend_id.id
-		}
-		else
-			this.friend_id = this.$store.state.friend_id
-
-		if (this.$store.state.friend_id)
-			this.conversations.map((item: any) => 
-			{
-				if (item.friend_id.id == this.$store.state.friend_id)
-					this.messages = item.messages
-			})
+		if (this.$store.state.conversations)
+			this.messages = this.$store.state.conversations[0].messages
 	}
 
-	async mounted()
-	{
-    const obs = this.$apollo.subscribe({
-    query: gql(`subscription
-      MessageUpsert
-      {
-        messageUpsert
-        {
-          id
-          conversation_id
-          {
-          	id
-          }
-     			user_id
-     			{
-     				id
-     			}
-          message
-        }
-    }`)})
-    obs.subscribe({
-      next: (data: any) => { 
-      	console.log(data)
-      	this.conversations.map((item: any) => 
-      	{
-      		if (item.id == data.data.messageUpsert.conversation_id.id)
-      			item.messages.push(data.data.messageUpsert)	
-      	})
-      },
-      error: (error: any) => console.log(error)
-    })
-	}
+	// async mounted()
+	// {
+ //    const obs = this.$apollo.subscribe({
+ //    query: gql(`subscription
+ //      MessageUpsert
+ //      {
+ //        messageUpsert
+ //        {
+ //          id
+ //          conversation_id
+ //          {
+ //          	id
+ //          }
+ //     			user_id
+ //     			{
+ //     				id
+ //     			}
+ //          message
+ //        }
+ //    }`)})
+ //    obs.subscribe({
+ //      next: (data: any) => { 
+ //      	console.log(data)
+ //      	this.conversations.map((item: any) => 
+ //      	{
+ //      		if (item.id == data.data.messageUpsert.conversation_id.id)
+ //      			item.messages.push(data.data.messageUpsert)	
+ //      	})
+ //      },
+ //      error: (error: any) => console.log(error)
+ //    })
+	// }
 
 	async updated()
 	{
@@ -133,70 +94,70 @@ export default class Conversations extends Vue
 		el.scrollTop = el.scrollHeight
 	}
 
-	select(id: number)
-	{
-		this.friendSet(id)
-		this.conversations.map((item: any) => 
-		{
-			if (item.friend_id.id == id)
-			{
-				this.messages = item.messages
-				this.friend_id = item.friend_id.id 
-			}
-		})
-	}
+	// select(id: number)
+	// {
+	// 	this.friendSet(id)
+	// 	this.conversations.map((item: any) => 
+	// 	{
+	// 		if (item.friend_id.id == id)
+	// 		{
+	// 			this.messages = item.messages
+	// 			this.friend_id = item.friend_id.id 
+	// 		}
+	// 	})
+	// }
 
-	async store()
-	{
-		this.$apollo.mutate({
-			mutation: gql(`mutation($id: ID! $friend_id: ID! $message: String!)
-			{
-			  messageUpsert(input: {
-			    id: $id
-			    friend_id: $friend_id
-			    message: $message
-			  })
-			  {
-			    id
-			    conversation_id
-			    {
-				    id
-				    friend_id
-				    {
-				      id
-				      name
-				    }
-				    messages
-				    {
-				      id
-				      user_id
-				      {
-				        id
-				      }
-				      message
-				    }
-			    }
-			    user_id
-			    {
-			    	id
-			    }
-			    message
-			  }
-			}`),
-			variables: 
-			{
-				id: 0,
-				friend_id: this.friend_id,
-				message: this.message
-			}
-		})
-		.then(res => {
-			this.conversations.upsert(res.data.messageUpsert.conversation_id)
-			this.messages = this.conversations.get(res.data.messageUpsert.conversation_id.id).messages
-			this.message = ''
-		})
-		.catch(err => console.log(err))
-	}
+	// async store()
+	// {
+	// 	this.$apollo.mutate({
+	// 		mutation: gql(`mutation($id: ID! $friend_id: ID! $message: String!)
+	// 		{
+	// 		  messageUpsert(input: {
+	// 		    id: $id
+	// 		    friend_id: $friend_id
+	// 		    message: $message
+	// 		  })
+	// 		  {
+	// 		    id
+	// 		    conversation_id
+	// 		    {
+	// 			    id
+	// 			    friend_id
+	// 			    {
+	// 			      id
+	// 			      name
+	// 			    }
+	// 			    messages
+	// 			    {
+	// 			      id
+	// 			      user_id
+	// 			      {
+	// 			        id
+	// 			      }
+	// 			      message
+	// 			    }
+	// 		    }
+	// 		    user_id
+	// 		    {
+	// 		    	id
+	// 		    }
+	// 		    message
+	// 		  }
+	// 		}`),
+	// 		variables: 
+	// 		{
+	// 			id: 0,
+	// 			friend_id: this.friend_id,
+	// 			message: this.message
+	// 		}
+	// 	})
+	// 	.then(res => {
+	// 		this.conversations.upsert(res.data.messageUpsert.conversation_id)
+	// 		this.messages = this.conversations.get(res.data.messageUpsert.conversation_id.id).messages
+	// 		this.message = ''
+	// 	})
+	// 	.catch(err => console.log(err))
+	// }
 
 }
 </script>
