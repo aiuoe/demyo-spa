@@ -9,8 +9,8 @@ Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
-    path: '/',
-    name: 'Home',
+    path: '/login',
+    name: 'Login',
     component: Login,
     meta: {
       islogged: true
@@ -74,7 +74,7 @@ router.beforeEach((to, from, next) => {
 router.beforeEach((to, from, next) => {
    if (to.matched.some(record => record.meta.islogged)) {
     if (window.localStorage.getItem('token') != null) 
-      next('/inicio')
+      next('/dashboard')
     else 
       next()
   } else {
