@@ -104,18 +104,23 @@ export default class Menu extends Vue
     }`)})
     obs.subscribe({
       next: (data: any) => { 
-        console.log(data)
-        this.$store.state.conversations.map((conversation: any) =>
-        {
-          if(conversation.id == data.data.messageUpsert.conversation_id.id)
-            conversation.messages.map((message: any) => 
-            {
-              if(message.id == data.data.messageUpsert.id)
-                message.message = data.data.messageUpsert.message
-              else
-                conversation.messages.push(data.data.messageUpsert)
-            })
-        })
+        // console.log(data)
+        let conversation = this.$store.state.conversations.map((conversation: any) => conversation.id == data.data.messageUpsert.conversation_id.id)
+        let message = conversation.messages.map((message: any) =>  message.id == data.data.messageUpsert.id)
+        message.message = data.data.messageUpsert.message
+        console.log(conversation)
+        console.log(message)
+        // this.$store.state.conversations.map((conversation: any) =>
+        // {
+        //   if(conversation.id == data.data.messageUpsert.conversation_id.id)
+        //     conversation.messages.map((message: any) => 
+        //     {
+        //       if(message.id == data.data.messageUpsert.id)
+        //         message.message = data.data.messageUpsert.message
+        //       else
+        //         conversation.messages.push(data.data.messageUpsert)
+        //     })
+        // })
       },
       error: (error: any) => console.log(error)
     })
