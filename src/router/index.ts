@@ -11,27 +11,46 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'Home',
-    component: Login
+    component: Login,
+    meta: {
+      islogged: true
+    }
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard
+    component: Dashboard,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/users',
     name: 'Users',
-    component: Users
+    component: Users,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/conversations',
     name: 'Conversations',
-    component: Conversations
+    component: Conversations,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/notifications',
     name: 'Notification',
-    component: Conversations
+    component: Conversations,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '*',
+    redirect: '/login'
   }
 ]
 
@@ -39,6 +58,28 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+   if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (window.localStorage.getItem('token') == null) 
+      next('/login')
+    else 
+      next()
+  } else {
+    next()
+  } 
+})
+
+router.beforeEach((to, from, next) => {
+   if (to.matched.some(record => record.meta.islogged)) {
+    if (window.localStorage.getItem('token') != null) 
+      next('/inicio')
+    else 
+      next()
+  } else {
+    next()
+  } 
 })
 
 export default router
