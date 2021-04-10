@@ -4,7 +4,7 @@ div
 		Menu
 
 	.conversations
-		ul.list.list-conversations
+		ul.list.list-conversations(v-if="conversations")
 			li.item-conversations(v-for="conversation in conversations")
 				a(@click="select(conversation.friend_id.id)")
 					span {{ conversation.friend_id.name[0] | capitalize }}
@@ -37,55 +37,16 @@ import '@/modules/array'
 	},
 	computed: 
 	{
-		...mapGetters(['me_id', 'conversations'])
+		...mapGetters(['me_id', 'conversations', 'messages'])
 	}
 })
 export default class Conversations extends Vue 
 {
 	friendSet!: (value: number) => void
 	message: string = ''
-	messages: any = []
 	friend_id: number = 0
 	id: number = 0
 
-	async created()
-	{
-		if (this.$store.state.conversations)
-			this.messages = this.$store.state.conversations[0].messages
-	}
-
-	// async mounted()
-	// {
- //    const obs = this.$apollo.subscribe({
- //    query: gql(`subscription
- //      MessageUpsert
- //      {
- //        messageUpsert
- //        {
- //          id
- //          conversation_id
- //          {
- //          	id
- //          }
- //     			user_id
- //     			{
- //     				id
- //     			}
- //          message
- //        }
- //    }`)})
- //    obs.subscribe({
- //      next: (data: any) => { 
- //      	console.log(data)
- //      	this.conversations.map((item: any) => 
- //      	{
- //      		if (item.id == data.data.messageUpsert.conversation_id.id)
- //      			item.messages.push(data.data.messageUpsert)	
- //      	})
- //      },
- //      error: (error: any) => console.log(error)
- //    })
-	// }
 
 	async updated()
 	{
