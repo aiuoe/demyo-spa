@@ -19,7 +19,28 @@ messages($page: Int!)
   }
 }`)
 
-// export const MESSAGE_UPSERT = gql(``)
+export const MESSAGE_UPSERT = gql(`mutation($id: ID! $friend_id: ID! $message: String!)
+{
+  messageUpsert(input: {
+    id: $id
+    friend_id: $friend_id
+    message: $message
+  })
+  {
+    id
+    conversation_id
+    user_id
+    {
+      id
+      name
+      lastname
+    }
+    message
+    created_at
+    updated_at
+  }
+}`)
+
 // export const MESSAGE_DELETE = gql(``)
 
 export const MESSAGE_SUBSCRIPTION = gql(`subscription
@@ -36,5 +57,7 @@ MessageUpsert
        lastname
      }
     message
+    created_at
+    updated_at
   }
 }`)

@@ -26,6 +26,7 @@ import Menu from '@/components/Menu.vue'
 import gql from 'graphql-tag';
 import { capitalize } from '@/modules/filter'
 import { mapState, mapActions, mapGetters } from 'vuex'
+import { MESSAGE_UPSERT } from '@/graphql/message'
 import '@/modules/array'
 
 @Component({
@@ -54,70 +55,28 @@ export default class Conversations extends Vue
 		el.scrollTop = el.scrollHeight
 	}
 
-	// select(id: number)
-	// {
-	// 	this.friendSet(id)
-	// 	this.conversations.map((item: any) => 
-	// 	{
-	// 		if (item.friend_id.id == id)
-	// 		{
-	// 			this.messages = item.messages
-	// 			this.friend_id = item.friend_id.id 
-	// 		}
-	// 	})
-	// }
+	select(id: number)
+	{
+		this.friend_id = id 
+	}
 
-	// async store()
-	// {
-	// 	this.$apollo.mutate({
-	// 		mutation: gql(`mutation($id: ID! $friend_id: ID! $message: String!)
-	// 		{
-	// 		  messageUpsert(input: {
-	// 		    id: $id
-	// 		    friend_id: $friend_id
-	// 		    message: $message
-	// 		  })
-	// 		  {
-	// 		    id
-	// 		    conversation_id
-	// 		    {
-	// 			    id
-	// 			    friend_id
-	// 			    {
-	// 			      id
-	// 			      name
-	// 			    }
-	// 			    messages
-	// 			    {
-	// 			      id
-	// 			      user_id
-	// 			      {
-	// 			        id
-	// 			      }
-	// 			      message
-	// 			    }
-	// 		    }
-	// 		    user_id
-	// 		    {
-	// 		    	id
-	// 		    }
-	// 		    message
-	// 		  }
-	// 		}`),
-	// 		variables: 
-	// 		{
-	// 			id: 0,
-	// 			friend_id: this.friend_id,
-	// 			message: this.message
-	// 		}
-	// 	})
-	// 	.then(res => {
-	// 		this.conversations.upsert(res.data.messageUpsert.conversation_id)
-	// 		this.messages = this.conversations.get(res.data.messageUpsert.conversation_id.id).messages
-	// 		this.message = ''
-	// 	})
-	// 	.catch(err => console.log(err))
-	// }
+	async store()
+	{
+		this.$apollo.mutate({
+			mutation: MESSAGE_UPSERT,
+			variables: 
+			{
+				id: 0,
+				friend_id: this.friend_id,
+				message: this.message
+			}
+		})
+		.then(res => {
+			this.$store.state.messages.upsert(res.data.messageUpsert)
+			this.message = ''
+		})
+		.catch(err => console.log(err))
+	}
 
 }
 </script>
