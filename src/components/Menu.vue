@@ -22,6 +22,11 @@ nav.nav
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { mapState, mapActions } from 'vuex'
+import { CONVERSATION_ALL } from '@/graphql/conversation'
+import { MESSAGE_ALL } from '@/graphql/message'
+import { MESSAGE_SUBSCRIPTION } from '@/graphql/message'
+import { FRIEND_ALL } from '@/graphql/friend'
+import { FRIEND_REQUEST_ALL } from '@/graphql/friend'
 import gql from 'graphql-tag'
 import axios from 'axios'
 import '@/modules/array'
@@ -29,13 +34,22 @@ import '@/modules/array'
 @Component({
   methods:
   {
-    ...mapActions(['meSet', 'conversationAction'])
+    ...mapActions([
+      'meSet', 
+      'friendUpsert', 
+      'messageUpsert', 
+      'conversationUpsert', 
+      'friendRequestUpsert'
+    ])
   }
 })
 export default class Menu extends Vue 
 {
   meSet!: (value: number) => void
-  conversationAction!: (value: any) => void
+  conversationUpsert!: (value: any) => void
+  messageUpsert!: (value: any) => void
+  friendUpsert!: (value: any) => void
+  friendRequestUpsert!: (value: any) => void
 
   async created()
   {
@@ -48,74 +62,35 @@ export default class Menu extends Vue
         }
       }`)
     })
-    .then(res => this.meSet(res.data.me.id))
-    .catch(err => console.log(err))
+    .then((res: any) => this.meSet(res.data.me.id))
+    .catch(error => console.log(error))
 
-    await this.$apollo.query({
-      query: gql(`query
-      {
-        conversations(page:1)
-        {
-          id
-          friend_id
-          {
-            id
-            name
-          }
-          messages
-          {
-            id
-            conversation_id
-            {
-             id
-            }
-            user_id
-            {
-              id
-            }
-            message
-          }
-        }
-      }`)
-    })
-    .then(res => this.conversationAction(res.data.conversations))
-    .catch(err => console.log(err))
+    // conversations
+    await this.$apollo.query({query: CONVERSATION_ALL, variables: {page: 1}})
+    .then((res: any) => this.conversationUpsert(res.data.conversations))
+    .catch(error => console.log(error))
+
+    // messages
+    await this.$apollo.query({query: MESSAGE_ALL, variables: {page: 1}})
+    .then((res: any) => this.messageUpsert(res.data.messages))
+    .catch(error => console.log(error))
+
+    // friends
+    await this.$apollo.query({query: FRIEND_ALL, variables: {page: 1}})
+    .then((res: any) => this.friendUpsert(res.data.friends))
+    .catch(error => console.log(error))
+
+    // friends requests
+    await this.$apollo.query({query: FRIEND_REQUEST_ALL, variables: {page: 1}})
+    .then((res: any) => this.friendRequestUpsert(res.data.friendrequests))
+    .catch(error => console.log(error))
   }
 
   async mounted()
   {
-    const obs = this.$apollo.subscribe({
-    query: gql(`subscription
-      MessageUpsert
-      {
-        messageUpsert
-        {
-          id
-          conversation_id
-          {
-           id
-          }
-           user_id
-           {
-             id
-           }
-          message
-        }
-    }`)})
+    const obs = this.$apollo.subscribe({query: MESSAGE_SUBSCRIPTION})
     obs.subscribe({
-      next: (data: any) => { 
-        this.$store.state.conversations.map((conversation: any) =>
-        {
-          if(conversation.id == data.data.messageUpsert.conversation_id.id)
-            conversation.messages.map((message: any) => 
-            {
-              if(message.id == data.data.messageUpsert.id)
-                message.message = data.data.messageUpsert.message
-              else
-                conversation.messages.push(data.data.messageUpsert)
-            })
-        })
-      },
+      next: (data: any) => this.$store.state.messages.upsert(data.data.messageUpsert),
       error: (error: any) => console.log(error)
     })
   }
@@ -134,7 +109,7 @@ export default class Menu extends Vue
       window.localStorage.clear()
       this.$router.push({ path: '/' })
     })
-    .catch(err => console.log(err))
+    .catch(error => console.log(error))
   }
 }
 </script>

@@ -5,7 +5,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import axios from 'axios'
 import Menu from '@/components/Menu.vue'
 
 @Component({

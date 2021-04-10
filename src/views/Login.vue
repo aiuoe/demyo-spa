@@ -50,12 +50,12 @@ export default class Login extends Vue
 			password: this.password
 		}
 		await axios.post(`${process.env.VUE_APP_API_URL}/api/auth/login`, params)
-		.then(res => 
+		.then((res: any) => 
 		{
 			window.localStorage.setItem('token', res['data']['access_token'])
-			this.$router.push({path: 'dashboard'}).catch(err => err)
+			this.$router.push({path: 'dashboard'}).catch((err: any) => err)
 		})
-		.catch(err => console.log(err))
+		.catch((err: any) => console.log(err))
 	}
 
 	async signup()
@@ -71,7 +71,7 @@ export default class Login extends Vue
 		}
 
 		await axios.post(`${process.env.VUE_APP_API_URL}/api/auth/signup`, params)
-		.then(res => this.show())
+		.then((res: any) => this.show())
 		.catch(err => console.log(err))
 	}
 }

@@ -7,7 +7,10 @@ export default new Vuex.Store({
   state: {
 		me_id: 0,
 		friend_id: 0,
-    conversations: null
+    conversations: [],
+    messages: [],
+    friends: [],
+    friendRequests: []
   },
   getters: {
     me_id: state => 
@@ -17,6 +20,18 @@ export default new Vuex.Store({
     conversations: state => 
     {
       return state.conversations
+    },
+    messages: state =>
+    {
+      return state.messages
+    },
+    friends: state =>
+    {
+      return state.friends
+    },
+    friendRequests: state =>
+    {
+      return state.friendRequests
     }
   },
   mutations: {
@@ -28,9 +43,21 @@ export default new Vuex.Store({
   	{
   		state.friend_id = value
   	},
-    conversationMutation(state, value)
+    conversationUpsert(state, value)
     {
       state.conversations = value
+    },
+    messageUpsert(state, value)
+    {
+      state.messages = value
+    },
+    friendUpsert(state, value)
+    {
+      state.friends = value
+    },
+    friendRequestUpsert(state, value)
+    {
+      state.friendRequests = value
     }
   },
   actions: {
@@ -42,9 +69,21 @@ export default new Vuex.Store({
   	{
 			commit('friendSet', value)  		
   	},
-    async conversationAction({commit}, value)
+    async conversationUpsert({commit}, value)
     {
-      commit('conversationMutation', value)
+      commit('conversationUpsert', value)
+    },
+    async messageUpsert({commit}, value)
+    {
+      commit('messageUpsert', value)
+    },
+    async friendUpsert({commit}, value)
+    {
+      commit('friendUpsert', value)
+    },
+    async friendRequestUpsert({commit}, value)
+    {
+      commit('friendRequestUpsert', value)
     }
   },
   modules: {
