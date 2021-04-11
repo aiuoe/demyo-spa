@@ -53,22 +53,8 @@ export default new Vuex.Store({
       if (state.messages.length === 0 && Array.isArray(value))
         state.messages = value
       else
-      {
-        let count = state.messages.length
-        // exists = !!state.messages.find((i: any) => i.id == value.id)
-
-        // if (count && exists)
-        // {
-        //   let index: number = state.messages.findIndex((i: any) => i.id == value.id)
-        //   state.messages.splice(index, 1, value)
-        // }
-        // if (exists == false && count && Array.isArray(value) === false)
- 
-        if (count && Array.isArray(value) === false)
+        if (state.messages.length && Array.isArray(value) === false)
           state.messages.upsert(value)
-      }
-
-
     },
     friendUpsert(state, value)
     {

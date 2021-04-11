@@ -17,7 +17,7 @@ Array.prototype.upsert = function (item: any): any
 
 Array.prototype.delete = function (id: number): any
 {
-	return this.splice(this.indexOf( this.find( (item: any) => item.id == id ) ), 1)
+	return this.splice(this.findIndex((item: any) => item.id == id ), 1)
 }
 
 Array.prototype.orderBy = function (params: any): any
@@ -59,5 +59,5 @@ Array.prototype.where = function (key: string, operator: string, value: string)
 
 Array.prototype.get = function (id: number): any
 {
-	return this[this.indexOf(this.find((i: any) => i.id == id))]
+	return this[this.findIndex((i: any) => i.id == id)]
 }
