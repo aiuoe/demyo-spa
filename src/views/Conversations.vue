@@ -48,7 +48,6 @@ export default class Conversations extends Vue
 	friend_id: number = 0
 	id: number = 0
 
-
 	async updated()
 	{
 		let el: any = document.querySelector('.list-messages')

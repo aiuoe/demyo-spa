@@ -7,10 +7,10 @@ export default new Vuex.Store({
   state: {
 		me_id: 0,
 		friend_id: 0,
-    conversations: [],
-    messages: [],
-    friends: [],
-    friendRequests: []
+    conversations: new Array<any>(),
+    messages: new Array<any>(),
+    friends: new Array<any>(),
+    friendRequests: new Array<any>()
   },
   getters: {
     me_id: state => 
@@ -47,9 +47,24 @@ export default new Vuex.Store({
     {
       state.conversations = value
     },
-    messageUpsert(state, value)
+    messageUpsert(state, value: any)
     {
-      state.messages = value
+      if (state.messages.length === 0 && Array.isArray(value))
+      {
+        state.messages = value
+      }
+      else
+      {
+        if (!!state.messages.find((i: any) => i.id == value.id) && state.messages.length)
+        {
+          let index: number = state.messages.findIndex((i: any) => i.id == value.id)
+          state.messages[index] = value
+        }
+        if (!!state.messages.find((i: any) => i.id == value.id) == false && state.messages.length)
+          state.messages.push(value)
+      }
+
+
     },
     friendUpsert(state, value)
     {

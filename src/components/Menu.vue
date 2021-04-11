@@ -90,7 +90,10 @@ export default class Menu extends Vue
   {
     const obs = this.$apollo.subscribe({query: MESSAGE_SUBSCRIPTION})
     obs.subscribe({
-      next: (data: any) => this.$store.state.messages.upsert(data.data.messageUpsert),
+      next: (data: any) => {
+        console.log(data)
+        this.messageUpsert(data.data.messageUpsert)
+      },
       error: (error: any) => console.log(error)
     })
   }

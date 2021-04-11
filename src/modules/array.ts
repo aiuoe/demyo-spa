@@ -1,33 +1,34 @@
 interface Array<T>
 {
-	upsert(item: any): void
-	delete(id: number): void
-	orderBy(params: any): void
+	upsert(item: any): any
+	delete(id: number): any
+	orderBy(params: any): any
 	where(key: string, operator: string, value: string): any
 	get(id: number): any
 }
 
-Array.prototype.upsert = function (item: any) {
+Array.prototype.upsert = function (item: any): any
+{
 	if (this[this.indexOf(this.find((i: any) => i.id == item.id))])
 		return this[this.indexOf(this.find((i: any) => i.id == item.id))] = item
 	else
-		return this.push(item) 
+		return this.push(item)
 }
 
-Array.prototype.delete = function (id: number): void
+Array.prototype.delete = function (id: number): any
 {
-	this.splice(this.indexOf( this.find( (item: any) => item.id == id ) ), 1)
+	return this.splice(this.indexOf( this.find( (item: any) => item.id == id ) ), 1)
 }
 
-Array.prototype.orderBy = function (params: any): void
+Array.prototype.orderBy = function (params: any): any
 {
 	Object.entries(params).map((p: any) => {
 		const [key, value] = p
 
 		if (value == 'asc')
-			this.sort((a, b) => (b[key] < a[key])? 1 : -1)
+			return this.sort((a, b) => (b[key] < a[key])? 1 : -1)
 		else if (value == 'desc')
-			this.sort((a, b) => (b[key] > a[key])? 1 : -1)
+			return this.sort((a, b) => (b[key] > a[key])? 1 : -1)
 	})
 }
 
