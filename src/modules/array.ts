@@ -9,8 +9,8 @@ interface Array<T>
 
 Array.prototype.upsert = function (item: any): any
 {
-	if (this[this.indexOf(this.find((i: any) => i.id == item.id))])
-		return this[this.indexOf(this.find((i: any) => i.id == item.id))] = item
+	if (!!this.find((i: any) => i.id == item.id))
+		return this.splice(this.findIndex((i: any) => i.id == item.id), 1, item)
 	else
 		return this.push(item)
 }

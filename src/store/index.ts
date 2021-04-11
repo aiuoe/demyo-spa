@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import '@/modules/array'
 
 Vue.use(Vuex)
 
@@ -50,27 +51,21 @@ export default new Vuex.Store({
     messageUpsert(state, value: any)
     {
       if (state.messages.length === 0 && Array.isArray(value))
-      {
-        console.log('all')
         state.messages = value
-      }
       else
       {
-        let count = state.messages.length,
-        exists = !!state.messages.find((i: any) => i.id == value.id),
-        isObject = typeof value === 'object'
+        let count = state.messages.length
+        // exists = !!state.messages.find((i: any) => i.id == value.id)
 
-        if (count && exists)
-        {
-          console.log('edit')
-          let index: number = state.messages.findIndex((i: any) => i.id == value.id)
-          state.messages.splice(index, 1, value)
-        }
-        if (exists == false && count && Array.isArray(value) === false)
-        {
-          console.log('push', value)
-          state.messages.push(value)
-        }
+        // if (count && exists)
+        // {
+        //   let index: number = state.messages.findIndex((i: any) => i.id == value.id)
+        //   state.messages.splice(index, 1, value)
+        // }
+        // if (exists == false && count && Array.isArray(value) === false)
+ 
+        if (count && Array.isArray(value) === false)
+          state.messages.upsert(value)
       }
 
 
