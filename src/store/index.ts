@@ -51,17 +51,26 @@ export default new Vuex.Store({
     {
       if (state.messages.length === 0 && Array.isArray(value))
       {
+        console.log('all')
         state.messages = value
       }
       else
       {
-        if (!!state.messages.find((i: any) => i.id == value.id) && state.messages.length)
+        let count = state.messages.length,
+        exists = !!state.messages.find((i: any) => i.id == value.id),
+        isObject = typeof value === 'object'
+
+        if (count && exists)
         {
+          console.log('edit')
           let index: number = state.messages.findIndex((i: any) => i.id == value.id)
-          state.messages[index] = value
+          state.messages.splice(index, 1, value)
         }
-        if (!!state.messages.find((i: any) => i.id == value.id) == false && state.messages.length)
+        if (exists == false && count && Array.isArray(value) === false)
+        {
+          console.log('push', value)
           state.messages.push(value)
+        }
       }
 
 
