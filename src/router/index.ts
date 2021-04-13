@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Login from '../views/Login.vue'
+import Home from '../views/Home.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Users from '../views/Users.vue'
 import Conversations from '../views/Conversations.vue'
@@ -9,9 +10,9 @@ Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
-    path: '/login',
-    name: 'Login',
-    component: Login,
+    path: '/',
+    name: '',
+    component: Home,
     meta: {
       islogged: true
     }
@@ -50,7 +51,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '*',
-    redirect: '/login'
+    redirect: '/'
   }
 ]
 
@@ -63,7 +64,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
    if (to.matched.some(record => record.meta.requiresAuth)) {
     if (window.localStorage.getItem('token') == null) 
-      next('/login')
+      next('/')
     else 
       next()
   } else {

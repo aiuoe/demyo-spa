@@ -1,228 +1,200 @@
-<template>
-	<div class="landing_page">
-		<div class="landing_logo">
-			<img src="../assets/logo.png" alt="svg" class="logo">
-			<img src="../assets/c.svg" alt="svg" class="vector">
-			<h2 class="landing--name">SwingUA</h2>
-		</div>
-		<div class="landing_btn">
-			<div class="text-name">
-				<h1>SwingUA</h1>
-				<p>Место для подключения</p>
-			</div>
-			<button class="btn landing--btn" id="open-login">Авторизоваться</button>
-			<span class="landing--text">У вас нет аккаунта? <a href="#" id="open-register">Зарегистрироваться</a></span>
-			<div class="line"></div>
-		</div>
-	</div>
+<template lang="pug">
+div(class="container-custom")
+	header(class="top_header")
+		div(class="top_header_left")
+			img(src="/img/logo2.svg")
+			h3 SwingUA
+		div(class="top_header_right")
+			button(@click="login = true" class="open_login" id="open_login") Авторизоваться
+	main
+		div(class="cont_title")
+			h1(class="title_login") идеальное свидание
+		button(@click="signup = true" class="open_register" id="open_register") Зарегистрироваться
+		button(class="open--login" id="open_login-movil") Авторизоваться
+		Login(v-if="login" class="animate__animated animate__fadeIn" v-bind:login.sync="login")
+		Signup(v-if="signup" class="animate__animated animate__fadeIn" v-bind:signup.sync="signup")
+	footer
+		h4(class="footer") © SwingUA - 2021
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { Component, Vue } from 'vue-property-decorator'
+import Login from '@/components/Login.vue'
+import Signup from '@/components/Signup.vue'
 
 @Component({
-  components: {
-    HelloWorld,
-  },
+	components: { Login, Signup }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue 
+{
+	login: boolean = false
+	signup: boolean = false
+}
 </script>
-<style scoped lang="scss">
-.landing_page
-{
-	width: 100%;
-	height: 100vh;
-	background-size: cover;
-	background-position: center;
-	background-attachment: fixed;
-	background-image: linear-gradient(rgba(255, 105, 92, .9), rgba(253, 42, 123, .9)), url(../assets/1.jpg);
-	display: grid;
-	grid-template-columns: 100%;
-	grid-template-rows: 71% 29%;
+<style scoped lang="sass">
+body
+  font-family: 'Roboto', sans-serif
+  user-select: none
 
-}
+.container-custom
+  width: 100%
+  height: 100vh
+  background-size: cover
+  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2), rgba(0,0,0, 0.5), rgba(0,0,0, 0.6)), url('/img/1.jpg')
+  background-position: center
+  overflow: hidden
 
-.landing_logo
-{
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
+.top_header
+  width: 100%
+  height: 4rem
+  display: flex
+  align-items: center
+  justify-content: flex-start
+  position: fixed
+  padding: 0 13px
 
-.landing_logo img
-{
-	width: 30%;
-	height: 25%;
-	user-select: none;
-}
+.top_header_left
+    display: flex
+    align-items: center
+    margin-left: -0.6rem
+    margin-top: 0.4rem
 
-.landing_logo .landing--name
-{
-	font-size: 2rem;
-	margin-top: 0.2rem;
-	letter-spacing: 0.2rem;
-	color: var(--text-secundary);
-}
+.top_header_left h3
+  color: #fff
+  font-weight: 600
+  font-size: 1.85rem
+  letter-spacing: -1px
+  margin-left: -7px
 
-.landing_logo .vector
-{
-	display: none;
-}
+.top_header_left img
+  height: 65px
 
-.landing_btn .text-name
-{
-	display: none;
-}
+.top_header_right
+  display: none
 
-.landing_btn
-{
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-	align-items: center;
-	position: relative;
-}
+main
+  width: 100%
+  height: 100vh
+  display: flex
+  justify-content: center
+  align-items: center
+  flex-direction: column
 
-.landing_btn .landing--btn
-{
-	color: #2c2c2c;
-	background: var(--text-secundary);
-	box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
-	padding: 0.75rem 0;
-}
+main .cont_title
+  display: flex
+  justify-content: center
+  align-items: center
+  margin-bottom: 1.5rem
 
-.landing_btn .landing--btn:hover
-{
-	background-color: #f0f0f0;
-	transition: background-color 0.9s ease-out;
-}
+main .title_login
+  font-size: 7.2vw
+  color: #fff
 
-.landing_btn .landing--text
-{
-	color: var(--text-secundary);
-	font-size: 0.9rem;
-	margin-top: 1rem;
-	padding: 0 0 1.2rem 0;
-	margin-bottom: 1.2rem;
-}
+main .open_register
+  outline: none
+  border: none
+  min-height: 58px
+  width: 80%
+  border-radius: 100px
+  text-transform: uppercase
+  font-weight: 550
+  font-size: 0.96rem
+  color: #333
+  cursor: pointer
+  letter-spacing: .04em
+  background: #fff
 
-.landing_btn .landing--text a
-{
-	color: var(--text-secundary);
-	text-decoration: none;
-	font-weight: 600;
-}
+main .open--login
+  outline: none
+  border: 3px solid #fff
+  min-height: 58px
+  width: 80%
+  border-radius: 100px
+  text-transform: uppercase
+  font-weight: 550
+  font-size: 0.96rem
+  color: #fff
+  cursor: pointer
+  letter-spacing: .04em
+  background: none
+  margin-top: 1.2rem 
 
-.landing_btn .landing--text a:hover
-{
-	text-decoration: underline;
-}
+footer
+  width: 100%
+  display: flex
+  align-items: center
+  justify-content: center
+  padding-right: 1rem
+  position: absolute
+  bottom: 0.5rem
 
-@media screen and (min-width: 768px){
-	.landing_page
-	{
-		background-size: cover;
-		background-position: center;
-		background-image: linear-gradient(rgba(253, 42, 123, .7), rgba(255, 105, 92, .25)), url(../assets/3.jpg);
-	}
+footer .footer
+  font-size: 12px
+  font-weight: 100
+  color: #fff
+  letter-spacing: 1px
 
-	.landing_logo img
-	{
-		width: 27%;
-		height: 36%;
-	}
+@media screen and (min-width: 768px)
+  .container-custom
+    background-size: cover
+    background-image: linear-gradient(rgba(0, 0, 0, .9), rgba(0, 0, 0, 0.3), rgba(0,0,0, 0.4), rgba(0,0,0, 0.7)), url('/img/7.jpg')
+    background-position: center
 
-	.landing_logo .landing--name
-	{
-		font-size: 3rem;
-		margin-top: 0.2rem;
-		letter-spacing: 0.1rem;
-	}
+  .top_header
+    height: 5rem
+    justify-content: space-between
+    padding: 0 20px
 
-	.landing_btn
-	{
-		justify-content: center;
-	}
+  .top_header_left h3
+    font-size: 2.5rem
 
-	.landing_btn .landing--btn
-	{
-		width: 38%;
-	}
-}
+  .top_header_left img
+    height: 88px
 
-@media screen and (min-width: 1024px){
+  .top_header_right
+    display: flex
+    align-items: center
+    margin-right: 10px
 
-	.landing_page
-	{
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-template-rows: 100%;
-	}
+  .top_header_right .open_login
+    outline: none
+    border: none
+    min-height: 40px
+    padding: 0 24px 0 24px
+    border-radius: 4px
+    text-transform: uppercase
+    font-weight: 600
+    font-size: 0.96rem
+    color: #ff1744
+    cursor: pointer
+    letter-spacing: .02em
+    background-color: #fff
 
-	.landing_logo .landing--name
-	{
-		display: none;
-	}
+  .top_header_right .open_login:hover
+    background: linear-gradient(262deg, rgb(20, 159, 255), rgb(236, 47, 75))
+    color: white
 
-	.landing_logo img
-	{
-		width: 67%;
-		height: 67%;
-	}
+  .open--login
+    display: none
 
-	.landing_logo .logo
-	{
-		display: none;
-	}
+  main .cont_title
+    margin-bottom: 1rem
 
-	.landing_logo .vector
-	{
-		display: flex;
-	}
+  main .title_login
+    font-size: 5.9vw
 
-	.landing_btn .text-name
-	{
-		display: flex;
-		flex-direction: column;
-		text-align: center;
-		margin-bottom: 1.7rem;
-	}
+  main .open_register
+    width: auto
+    min-height: 55px
+    padding: 0 28px 0 28px
+    font-weight: 600
+    color: #fff
+    background: linear-gradient(262deg, rgb(20, 159, 255), rgb(236, 47, 75))
 
-	.landing_btn .text-name h1
-	{
-		color: var(--text-secundary);
-		font-size: 6rem;
-		margin-bottom: 0.3rem;
-	}
+  main .open_register:hover
+    background: linear-gradient(262deg,  rgb(236, 47, 75), rgb(20, 159, 255))
+    color: white
 
-	.landing_btn .text-name p
-	{
-		color: var(--text-secundary);
-	}
-
-	.landing_btn
-	{
-		grid-row: 1/2;
-	}
-
-	.landing_btn .landing--btn
-	{
-		padding: 0.9rem 0;
-	}
-
-	.landing_btn .landing--btn:hover
-	{
-		color: var(--text-secundary);
-		background-color: #d93783;
-		transition: background-color 0.9s ease-out;
-	}
-
-	.landing_btn .landing--text
-	{
-		margin-top: 1.5rem;
-		margin-bottom: 0;
-	}
-}
+  footer
+    justify-content: flex-end
 </style>

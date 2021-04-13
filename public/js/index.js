@@ -1,0 +1,1 @@
+window.$ = (selector) => document.querySelector(selector)
