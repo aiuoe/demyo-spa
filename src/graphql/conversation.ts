@@ -10,6 +10,7 @@ conversations($page: Int!)
     {
       id
       name
+      lastname
     }
   }
 }`)
