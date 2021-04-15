@@ -34,6 +34,7 @@ div(class="modal_register is_visible_register" id="modal_register")
             input(v-model="password" type="password" placeholder="пароль" autocomplete="off")
         input(type="submit" class="btn_register" value="регистр")
       div(class="form--text")
+      div(class="line-register")
 </template>
 
 <script lang="ts">
@@ -91,6 +92,7 @@ export default class Signup extends Vue
   align-items: center
   justify-content: center
   background-color: rgba(0,0,0, .8)
+  z-index: 999
 
 .modal_register_container
   width: 100%

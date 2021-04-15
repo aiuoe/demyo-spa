@@ -10,7 +10,7 @@ div(class="container-custom")
 		div(class="cont_title")
 			h1(class="title_login") идеальное свидание
 		button(@click="signup = true" class="open_register" id="open_register") Зарегистрироваться
-		button(class="open--login" id="open_login-movil") Авторизоваться
+		button(class="open--login" @click="login = true" id="open_login-movil") Авторизоваться
 		Login(v-if="login" class="animate__animated animate__fadeIn" v-bind:login.sync="login")
 		Signup(v-if="signup" class="animate__animated animate__fadeIn" v-bind:signup.sync="signup")
 	footer
@@ -39,6 +39,7 @@ body
 .container-custom
   width: 100%
   height: 100vh
+  max-height: 100vh
   background-size: cover
   background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2), rgba(0,0,0, 0.5), rgba(0,0,0, 0.6)), url('/img/1.jpg')
   background-position: center
@@ -124,9 +125,8 @@ footer
   display: flex
   align-items: center
   justify-content: center
-  padding-right: 1rem
-  position: absolute
-  bottom: 0.5rem
+  position: fixed
+  bottom: 10px
 
 footer .footer
   font-size: 12px

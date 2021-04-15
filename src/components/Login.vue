@@ -69,6 +69,7 @@ export default class Login extends Vue
   align-items: center
   justify-content: center
   background-color: rgba(0,0,0, .8)
+  z-index: 999
 
 .modal_login-container
   width: 100%
