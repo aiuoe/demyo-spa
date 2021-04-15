@@ -17,3 +17,20 @@ conversations($page: Int!)
 
 // export const CONVERSATION_UPSERT = gql(``)
 // export const CONVERSATION_DELETE = gql(``)
+
+export const CONVERSATION_SUBSCRIPTION = gql(`subscription
+ConversationUpsert
+{
+  conversationUpsert
+  {
+    id
+    friend_id
+    {
+     id
+     name
+     lastname
+    }
+    created_at
+    updated_at
+  }
+}`)

@@ -11,7 +11,7 @@ div(class="container-fluid")
 						
 						//- conversations
 						ul(class="user_box")
-							li(v-for="conversation in conversations" @click="select(conversation.friend_id.id)" class="messages")
+							li(v-for="conversation in conversations" @click="select(conversation.id, conversation.friend_id.id)" class="messages")
 								div(class="avatar")
 									img(src="https://randomuser.me/api/portraits/women/34.jpg")
 								div(class="friend")
@@ -24,7 +24,7 @@ div(class="container-fluid")
 							div(class="chat_title")
 								div(class="items")
 									i(class="fa fa-chevron-left")
-									span Mariana Veliz
+									span {{ friend_name | capitalize }} {{ friend_lastname | capitalize }}
 									div(class="btn_state")
 								i(class="fa fa-info-circle icon")
 
@@ -61,7 +61,7 @@ import { MESSAGE_UPSERT } from '@/graphql/message'
 	filters: {capitalize: capitalize},
 	methods:
 	{
-		...mapActions(['friendSet'])
+		...mapActions(['conversationSet'])
 	},
 	computed: 
 	{
@@ -70,10 +70,22 @@ import { MESSAGE_UPSERT } from '@/graphql/message'
 })
 export default class Conversations extends Vue 
 {
-	friendSet!: (value: number) => void
+	conversationSet!: (value: number) => void
 	message: string = ''
 	friend_id: number = 0
+	friend_name: string = ''
+	friend_lastname: string = ''
 	id: number = 0
+
+	async mounted()
+	{
+		if (this.$store.state.conversations.length)
+		{
+			this.friend_id = this.$store.state.conversations[0].friend_id.id
+			this.friend_name = this.$store.state.conversations[0].friend_id.name
+			this.friend_lastname = this.$store.state.conversations[0].friend_id.lastname
+		}
+	}
 
 	async updated()
 	{
@@ -81,9 +93,10 @@ export default class Conversations extends Vue
 		el.scrollTop = el.scrollHeight
 	}
 
-	select(id: number)
+	select(id: number, friend_id: number)
 	{
-		this.friend_id = id 
+		this.friend_id = friend_id 
+		this.conversationSet(id)
 	}
 
 	async store()
@@ -131,6 +144,9 @@ export default class Conversations extends Vue
 	display: flex
 	flex-direction: column
 	align-items: flex-start
+
+	.user
+		text-align: left
 
 .box_chat
 	width: 100%

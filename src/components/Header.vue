@@ -30,6 +30,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import { mapState, mapActions } from 'vuex'
 // queries and mutations
 import { CONVERSATION_ALL } from '@/graphql/conversation'
+import { CONVERSATION_SUBSCRIPTION } from '@/graphql/conversation'
 import { MESSAGE_ALL } from '@/graphql/message'
 import { MESSAGE_SUBSCRIPTION } from '@/graphql/message'
 import { FRIEND_ALL } from '@/graphql/friend'
@@ -97,10 +98,18 @@ export default class Header extends Vue
 
   async mounted()
   {
-    const obs = this.$apollo.subscribe({query: MESSAGE_SUBSCRIPTION})
-    obs.subscribe({
+    const messageSubscribe = this.$apollo.subscribe({query: MESSAGE_SUBSCRIPTION})
+    messageSubscribe.subscribe({
       next: (data: any) => {
         this.messageUpsert(data.data.messageUpsert)
+      },
+      error: (error: any) => console.log(error)
+    })
+    
+    const conversationSubscribe = this.$apollo.subscribe({query: CONVERSATION_SUBSCRIPTION})
+    conversationSubscribe.subscribe({
+      next: (data: any) => {
+        this.conversationUpsert(data.data.conversationUpsert)
       },
       error: (error: any) => console.log(error)
     })
