@@ -133,6 +133,7 @@ footer .footer
   font-weight: 100
   color: #fff
   letter-spacing: 1px
+  margin-right: 1rem
 
 @media screen and (min-width: 768px)
   .container-custom

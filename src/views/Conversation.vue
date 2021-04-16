@@ -8,7 +8,6 @@ div(class="container-fluid")
 					div(class="box_users")
 						div(class="user_title center")
 							p встречи
-						
 						//- conversations
 						ul(class="user_box")
 							li(v-for="conversation in conversations" @click="select(conversation.id, conversation.friend_id.id)" class="messages")
@@ -24,7 +23,7 @@ div(class="container-fluid")
 							div(class="chat_title")
 								div(class="items")
 									i(class="fa fa-chevron-left")
-									span {{ friend_name | capitalize }} {{ friend_lastname | capitalize }}
+									span(v-if="friend") {{ friend.friend_id.name | capitalize }}  {{ friend.friend_id.lastname | capitalize }}
 									div(class="btn_state")
 								i(class="fa fa-info-circle icon")
 
@@ -50,7 +49,7 @@ div(class="container-fluid")
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import Header from '@/components/Header.vue'
 import { capitalize } from '@/modules/filter'
 import { mapState, mapActions, mapGetters } from 'vuex'
@@ -65,26 +64,20 @@ import { MESSAGE_UPSERT } from '@/graphql/message'
 	},
 	computed: 
 	{
-		...mapGetters(['me_id', 'conversations', 'messages'])
+		...mapGetters(['me_id', 'conversations', 'messages', 'friend'])
 	}
 })
-export default class Conversations extends Vue 
+export default class Conversation extends Vue 
 {
 	conversationSet!: (value: number) => void
 	message: string = ''
 	friend_id: number = 0
-	friend_name: string = ''
-	friend_lastname: string = ''
 	id: number = 0
 
 	async mounted()
 	{
-		if (this.$store.state.conversations.length)
-		{
-			this.friend_id = this.$store.state.conversations[0].friend_id.id
-			this.friend_name = this.$store.state.conversations[0].friend_id.name
-			this.friend_lastname = this.$store.state.conversations[0].friend_id.lastname
-		}
+		let el: any = document.querySelector('.chat_cont')
+		el.scrollTop = el.scrollHeight		
 	}
 
 	async updated()
@@ -271,7 +264,7 @@ export default class Conversations extends Vue
 	list-style: none
 
 .chat_cont::-webkit-scrollbar
-	width: 3px
+	width: 0px
 
 .chat_cont::-webkit-scrollbar-thumb
 	background-color: rgb(20, 159, 255)

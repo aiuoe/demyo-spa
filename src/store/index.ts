@@ -22,6 +22,16 @@ export default new Vuex.Store({
 		{
 			return state.conversations
 		},
+		friend: state => 
+		{
+			if (state.conversations.length)
+			{
+				if (state.conversation_id == 0)
+					return state.conversations.filter(i => i.id == state.conversations[0].id)[0]
+				else
+					return state.conversations.filter(i => i.id == state.conversation_id)[0]
+			}
+		},
 		messages: state =>
 		{
 			if (state.conversations.length)

@@ -4,7 +4,8 @@ import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Users from '../views/Users.vue'
-import Conversations from '../views/Conversations.vue'
+import Conversation from '../views/Conversation.vue'
+import Profile from '../views/Profile.vue'
 
 Vue.use(VueRouter)
 
@@ -19,7 +20,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/dashboard',
-    name: 'Dashboard',
+    name: 'dashboard',
     component: Dashboard,
     meta: {
       requiresAuth: true
@@ -27,7 +28,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/users',
-    name: 'Users',
+    name: 'users',
     component: Users,
     meta: {
       requiresAuth: true
@@ -35,16 +36,24 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/conversations',
-    name: 'Conversations',
-    component: Conversations,
+    name: 'conversations',
+    component: Conversation,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: Profile,
     meta: {
       requiresAuth: true
     }
   },
   {
     path: '/notifications',
-    name: 'Notification',
-    component: Conversations,
+    name: 'notification',
+    component: Conversation,
     meta: {
       requiresAuth: true
     }

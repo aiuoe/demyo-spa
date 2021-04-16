@@ -19,7 +19,7 @@ header(class="header center" id="header")
       a(@click="router('conversations')" class="nav_item")
         i(class="fa fa-heart")
         span Yведомления
-      a(@click="router('conversations')" class="nav_item active")
+      a(@click="router('profile')" class="nav_item active")
         i(class="fa fa-user-alt")
         span профиль
   div(class="border")
