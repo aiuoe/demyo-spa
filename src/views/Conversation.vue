@@ -88,7 +88,6 @@ export default class Conversation extends Vue
 
 	select(id: number, friend_id: number)
 	{
-		console.log(friend_id)
 		this.friend_id = friend_id 
 		this.conversationSet(id)
 	}

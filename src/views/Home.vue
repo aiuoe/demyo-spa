@@ -3,7 +3,7 @@ div(class="container-custom")
 	header(class="top_header")
 		div(class="top_header_left")
 			img(src="/img/logo2.svg")
-			h3 SwingUA
+			h3 SwingRU
 		div(class="top_header_right")
 			button(@click="login = true" class="open_login" id="open_login") Авторизоваться
 	main
@@ -14,7 +14,7 @@ div(class="container-custom")
 		Login(v-if="login" class="animate__animated animate__fadeIn" v-bind:login.sync="login")
 		Signup(v-if="signup" class="animate__animated animate__fadeIn" v-bind:signup.sync="signup")
 	footer
-		h4(class="footer") © SwingUA - 2021
+		h4(class="footer") © SwingRU - 2021
 </template>
 
 <script lang="ts">

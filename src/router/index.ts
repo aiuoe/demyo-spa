@@ -6,6 +6,7 @@ import Dashboard from '../views/Dashboard.vue'
 import Users from '../views/Users.vue'
 import Conversation from '../views/Conversation.vue'
 import Profile from '../views/Profile.vue'
+import Search from '../views/Search.vue'
 
 Vue.use(VueRouter)
 
@@ -54,6 +55,14 @@ const routes: Array<RouteConfig> = [
     path: '/notifications',
     name: 'notification',
     component: Conversation,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: Search,
     meta: {
       requiresAuth: true
     }

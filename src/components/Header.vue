@@ -7,7 +7,7 @@ header(class="header center" id="header")
       div(class="logo_text")
         h1 SwingUA
     nav(class="main_nav")
-      a(@click="router('dashboard')" class="nav_item")
+      a(@click="router('search')" class="nav_item")
         i(class="fa fa-search")
         span найти
       a(@click="router('conversations')" class="nav_item")
@@ -35,6 +35,8 @@ import { MESSAGE_ALL } from '@/graphql/message'
 import { MESSAGE_SUBSCRIPTION } from '@/graphql/message'
 import { FRIEND_ALL } from '@/graphql/friend'
 import { FRIEND_REQUEST_ALL } from '@/graphql/friend'
+import { USER_ALL } from '@/graphql/user'
+
 // others
 import gql from 'graphql-tag'
 import axios from 'axios'
@@ -48,7 +50,8 @@ import '@/modules/array'
       'friendUpsert', 
       'messageUpsert', 
       'conversationUpsert', 
-      'friendRequestUpsert'
+      'friendRequestUpsert',
+      'userUpsert'
     ])
   }
 })
@@ -60,6 +63,7 @@ export default class Header extends Vue
   messageUpsert!: (value: any) => void
   friendUpsert!: (value: any) => void
   friendRequestUpsert!: (value: any) => void
+  userUpsert!: (value: any) => void
 
   async created()
   {
@@ -93,6 +97,11 @@ export default class Header extends Vue
     // friends requests
     await this.$apollo.query({query: FRIEND_REQUEST_ALL, variables: {page: 1}})
     .then((res: any) => this.friendRequestUpsert(res.data.friendrequests))
+    .catch(error => console.log(error))
+
+    // users
+    await this.$apollo.query({query: USER_ALL, variables: {page: 1}})
+    .then((res: any) => this.userUpsert(res.data.users))
     .catch(error => console.log(error))
   }
 

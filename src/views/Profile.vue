@@ -9,7 +9,7 @@ div.container-fluid
         div(class="box_profile")
           div(class="box_item box data")
             div(class="profile_img")
-              img(class="images" src="img/upload/img.jpeg")
+              img(class="images" src="https://placeimg.com/195/254/people")
             div(class="profile_data")
               h1 Josue Cortez
               div(class="state")

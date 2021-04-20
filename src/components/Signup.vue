@@ -11,7 +11,7 @@ div(class="modal_register is_visible_register" id="modal_register")
       p регистр
       span(class="text-register") Миллионы людей хотят встретить кого-то вроде вас
     div(class="container_form")
-      form(@submit.prevent="signup" class="modal--form")
+      form(@submit.prevent="signup" class="modal--form" enctype="multipart/form-data")
         div(class="input_item")
           div(class="input--i")
             i(class="fa fa-id-card")
