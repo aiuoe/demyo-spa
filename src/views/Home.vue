@@ -56,6 +56,8 @@ div(class="father")
 import { Component, Vue } from 'vue-property-decorator'
 import axios from 'axios'
 
+declare const M: any;
+
 @Component
 export default class Home extends Vue 
 {
