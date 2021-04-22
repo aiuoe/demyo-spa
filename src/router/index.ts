@@ -7,6 +7,7 @@ import Users from '../views/Users.vue'
 import Conversation from '../views/Conversation.vue'
 import Profile from '../views/Profile.vue'
 import Search from '../views/Search.vue'
+import Photo from '../views/Photo.vue'
 
 Vue.use(VueRouter)
 
@@ -55,6 +56,14 @@ const routes: Array<RouteConfig> = [
     path: '/notifications',
     name: 'notification',
     component: Conversation,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/photos',
+    name: 'photo',
+    component: Photo,
     meta: {
       requiresAuth: true
     }

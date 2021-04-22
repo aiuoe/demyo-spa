@@ -1,201 +1,336 @@
 <template lang="pug">
-div(class="container-custom")
-	header(class="top_header")
-		div(class="top_header_left")
-			img(src="/img/logo2.svg")
-			h3 SwingRU
-		div(class="top_header_right")
-			button(@click="login = true" class="open_login" id="open_login") Авторизоваться
-	main
-		div(class="cont_title")
-			h1(class="title_login") идеальное свидание
-		button(@click="signup = true" class="open_register" id="open_register") Зарегистрироваться
-		button(class="open--login" @click="login = true" id="open_login-movil") Авторизоваться
-		Login(v-if="login" class="animate__animated animate__fadeIn" v-bind:login.sync="login")
-		Signup(v-if="signup" class="animate__animated animate__fadeIn" v-bind:signup.sync="signup")
-	footer
-		h4(class="footer") © SwingRU - 2021
+div(class="father")
+	<main class="main__login">
+		<header class="header__login">
+			<div class="container__login header__box">
+				<div class="center__login one">
+					<span>Россия</span>
+				</div>
+				<div class="center__login two">
+					<p>SwingRU</p>
+				</div>
+				<div class="center__login three">
+					<a href="#" class="btn waves-effect waves-light btn__login">регистрироваться</a>
+				</div>
+			</div>
+		</header>
+		<div class="main__box container__login row">
+			<div class="box__register">
+				<div class="box1">
+					<div class="center">
+						<p class="title">Авторизоваться</p>
+					</div>
+					<div class="row input__box">
+						<form @submit.prevent="login" class="col s12">
+							<div class="input-field col s12">
+								<input v-model="email" type="email" id="email" class="validate" required="">
+								<label for="email">электронное письмо</label>
+								<span class="helper-text" data-error="напишите действующий адрес электронной почты" data-success=""></span>
+							</div>
+							<div class="input-field col s12">
+								<input v-model="password" id="password" type="password" class="validate" required="">
+										<label for="password">пароль</label>
+							</div>
+							<div class="center">
+								<button class="btn red darken-2 border__radius waves-effect waves-light" type="submit">авторизоваться</button>
+							</div>
+						</form>
+					</div>
+					<div class="center f_password">
+						<a href="#" class="password">Забыли свой пароль?</a>
+					</div>
+				</div>
+				<div class="box2 center__login">
+					<img src="img/logo6.svg" alt="logo">
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer class="footer__login">
+		<div class="divider__login"></div>
+		<p>© 2021 Авторские права - SwingRU.com</p>
+	</footer>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Login from '@/components/Login.vue'
-import Signup from '@/components/Signup.vue'
+import axios from 'axios'
 
-@Component({
-	components: { Login, Signup }
-})
+@Component
 export default class Home extends Vue 
 {
-	login: boolean = false
-	signup: boolean = false
+	email: string = ''
+	password: string = ''
+
+	async login()
+	{
+		await axios
+    .post(`${process.env.VUE_APP_API_URL}/api/auth/login`, {email: this.email, password: this.password})
+		.then((res: any) => 
+		{
+			window.localStorage.setItem('token', res['data']['access_token'])
+			this.$router.push({path: 'dashboard'}).catch((err: any) => err)
+		})
+		.catch((err: any) => M.toast({html: 'неверный пароль', classes: 'red darken-3'}))
+	}
 }
 </script>
-<style scoped lang="sass">
-body
-  font-family: 'Roboto', sans-serif
-  user-select: none
 
-.container-custom
-  width: 100%
-  height: 100vh
-  max-height: 100vh
-  background-size: cover
-  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2), rgba(0,0,0, 0.5), rgba(0,0,0, 0.6)), url('/img/1.jpg')
-  background-position: center
-  overflow: hidden
+<style scoped lang="scss">
+.father
+{
+	background: #f6f6f6;
+}
 
-.top_header
-  width: 100%
-  height: 4rem
-  display: flex
-  align-items: center
-  justify-content: flex-start
-  position: fixed
-  padding: 0 13px
+.container__login
+{
+	margin: 0 auto;
+	width: 88%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
 
-.top_header_left
-    display: flex
-    align-items: center
-    margin-left: -0.6rem
-    margin-top: 0.4rem
+.center__login
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
-.top_header_left h3
-  color: #fff
-  font-weight: 600
-  font-size: 1.85rem
-  letter-spacing: -1px
-  margin-left: -7px
+.header__login
+{
+	width: 100%;
+	height: 230px;
+	z-index: -1;
+	background-size: cover;
+	background-image: linear-gradient(rgba(0, 0, 0, .6), rgba(0,0,0, .03)), url('/img/2.jpg');
+	background-position: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
 
-.top_header_left img
-  height: 65px
+.header__box
+{
+	height: 4.3rem;
+	display: flex;
+	align-items: center;
+}
 
-.top_header_right
-  display: none
+.header__login .one
+{
+	display: none;
+}
 
-main
-  width: 100%
-  height: 100vh
-  display: flex
-  justify-content: center
-  align-items: center
-  flex-direction: column
+.header__login .three
+{
+	display: none;
+}
 
-main .cont_title
-  display: flex
-  justify-content: center
-  align-items: center
-  margin-bottom: 1.5rem
+.header__login span
+{
+	color: #fff;
+	font-size: 1.25rem;
+}
 
-main .title_login
-  font-size: 7.2vw
-  color: #fff
+.header__login p
+{
+	color: #fff;
+	font-size: 2.5rem;
+	font-weight: 600;
+	letter-spacing: -1px;
+	text-shadow: 1px 1px 3px #444s;
+	margin: 0;
+}
 
-main .open_register
-  outline: none
-  border: none
-  min-height: 58px
-  width: 80%
-  border-radius: 100px
-  text-transform: uppercase
-  font-weight: 550
-  font-size: 0.96rem
-  color: #333
-  cursor: pointer
-  letter-spacing: .04em
-  background: #fff
+.border__radius
+{
+	border-radius: 7px;
+	color: #fff;
+}
 
-main .open--login
-  outline: none
-  border: 3px solid #fff
-  min-height: 58px
-  width: 80%
-  border-radius: 100px
-  text-transform: uppercase
-  font-weight: 550
-  font-size: 0.96rem
-  color: #fff
-  cursor: pointer
-  letter-spacing: .04em
-  background: none
-  margin-top: 1.2rem 
+.btn.btn__login
+{
+	background-color: #fff;
+	color: #ff1744;
+	font-weight: 600;
+	border-radius: 7px;
+}
 
-footer
-  width: 100%
-  display: flex
-  align-items: center
-  justify-content: center
-  position: fixed
-  bottom: 10px
+.btn.btn__login:hover
+{
+	color: #fff;
+	background: #cf2f4b;
+}
 
-footer .footer
-  font-size: 12px
-  font-weight: 100
-  color: #fff
-  letter-spacing: 1px
-  margin-right: 1rem
+.main__login
+{
+	z-index: 9;
+	display: flex;
+	position: relative;
+	align-items: center;
+	justify-content: center;
+}
 
-@media screen and (min-width: 768px)
-  .container-custom
-    background-size: cover
-    background-image: linear-gradient(rgba(0, 0, 0, .9), rgba(0, 0, 0, 0.3), rgba(0,0,0, 0.4), rgba(0,0,0, 0.7)), url('/img/7.jpg')
-    background-position: center
+.main__box.container__login
+{
+	width: 85%;
+	margin-top: 6rem;
+	margin-bottom: 4rem;
+}
 
-  .top_header
-    height: 5rem
-    justify-content: space-between
-    padding: 0 20px
+.main__login .box__register
+{
+	width: 100%;
+	height: 83.5vh;
+	background: #fafafa;
+	border-radius: 10px;
+	box-shadow: 0 20px 40px rgb(0 0 0 / 10%);
+	display: flex;
+}
 
-  .top_header_left h3
-    font-size: 2.5rem
+.main__login .box__register .box1
+{
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	position: relative;
+}
 
-  .top_header_left img
-    height: 88px
+.box__register .row .input-field
+{
+	margin-top: 0rem;
+	margin-bottom: 0.4rem;
+}
 
-  .top_header_right
-    display: flex
-    align-items: center
-    margin-right: 10px
+.box__register .row .input-field:nth-child(2)
+{
+	margin-bottom: 1.5rem;
+}
 
-  .top_header_right .open_login
-    outline: none
-    border: none
-    min-height: 40px
-    padding: 0 24px 0 24px
-    border-radius: 4px
-    text-transform: uppercase
-    font-weight: 600
-    font-size: 0.96rem
-    color: #ff1744
-    cursor: pointer
-    letter-spacing: .02em
-    background-color: #fff
+.main__login .box__register .box1 .title
+{
+	font-size: 2rem;
+	font-weight: 500;
+	margin-top: 0;
+}
 
-  .top_header_right .open_login:hover
-    background: linear-gradient(262deg, rgb(20, 159, 255), rgb(236, 47, 75))
-    color: white
+.main__login .box__register .box1 .f_password
+{
+	position: absolute;
+	bottom: 1.8rem;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
-  .open--login
-    display: none
+.main__login .box__register .box1 .password
+{
+	color: #777;
+	font-size: 1.1rem;
+}
 
-  main .cont_title
-    margin-bottom: 1rem
+.main__login .box__register .box2
+{
+	width: 50%;
+	height: 100%;
+	background: #f6f6f6;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	display: none;
+}
 
-  main .title_login
-    font-size: 5.9vw
+.main__login .box__register .box2 img
+{
+	width: 65%;
+	
+	height: 65%;
+}
 
-  main .open_register
-    width: auto
-    min-height: 55px
-    padding: 0 28px 0 28px
-    font-weight: 600
-    color: #fff
-    background: linear-gradient(262deg, rgb(20, 159, 255), rgb(236, 47, 75))
+.input__box
+{
+	width: 97%;
+}
 
-  main .open_register:hover
-    background: linear-gradient(262deg,  rgb(236, 47, 75), rgb(20, 159, 255))
-    color: white
+.footer__login
+{
+	width: 100%;
+	height: 3rem;
+	background: #f6f6f6;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	padding: 0 6%;
+}
 
-  footer
-    justify-content: flex-end
+.footer__login .divider__login
+{
+	top: 0;
+	width: 90%;
+	height: 1px;
+	position: absolute;
+	background-color: #dedede;
+}
+
+.footer__login p
+{
+	font-size: 0.85rem;
+	color: #767676;
+	letter-spacing: 0.5px;
+}
+
+@media only screen and (min-width: 568px){
+	.header__login .three
+	{
+		display: flex;
+	}
+
+	.header__login .two
+	{
+		margin-right: -8rem;
+	}
+
+	.input__box
+	{
+		width: 90%;
+	}
+}
+
+@media only screen and (min-width: 768px)
+{
+	.header__login .one
+	{
+		display: flex;
+	}
+
+	.main__login .box__register .box2
+	{
+		display: flex;
+	}
+
+	.main__login .box__register .box1
+	{
+		width: 50%;
+	}
+
+	.main__box.container__login
+	{
+		width: 71%;
+	}
+
+	.header__login
+	{
+		// background-image: linear-gradient(rgba(0, 0, 0, .45), rgba(0,0,0, .03)), url(img/2.jpg);
+	}
+
+	.main__login .box__register .box1 .f_password
+	{
+		bottom: 1.3rem;
+	}
+}
 </style>

@@ -12,7 +12,6 @@ import { ApolloLink } from 'apollo-link'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 import { setContext } from 'apollo-link-context'
-import vuetify from './plugins/vuetify';
 
 Vue.use(VueApollo)
 
@@ -50,6 +49,5 @@ new Vue({
   router,
   store,
   apolloProvider,
-  vuetify,
   render: h => h(App)
 }).$mount('#app')

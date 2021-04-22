@@ -40,6 +40,7 @@ div(class="modal_register is_visible_register" id="modal_register")
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import axios from 'axios'
+import gql from 'graphql-tag';
 
 @Component
 export default class Signup extends Vue 
