@@ -4,6 +4,12 @@ body
   min-height: 100vh;
 	user-select: none;
   flex-direction: column;
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar 
+{
+	width: 5px;
 }
 
 main
@@ -14,8 +20,8 @@ main
 .bg__header
 {
 	background: #009FFF;
-	background: -webkit-linear-gradient(to right,  #009FFF, #ec2F4B);
-	background: linear-gradient(to right,  #009FFF, #ec2F4B);
+	background: -webkit-linear-gradient(262deg,  #009FFF, #ec2F4B);
+	background: linear-gradient(262deg,  #009FFF, #ec2F4B);
 }
 
 /* Scroll */
@@ -47,5 +53,13 @@ main
 
 .b__radius
 {
-	border-radius: 3px;
+	border-radius: 6px;
+}
+
+.status
+{
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	margin-left: 0.3rem;
 }

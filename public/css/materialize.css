@@ -3080,7 +3080,9 @@ td, th {
 
 .collection {
   margin: 0.5rem 0 1rem 0;
-  border: 1px solid #e0e0e0;
+  /*border: 1px solid #e0e0e0;*/
+  border-left: none;
+  border-right: none;
   border-radius: 2px;
   overflow: hidden;
   position: relative;
@@ -3089,13 +3091,13 @@ td, th {
 .collection .collection-item {
   background-color: #fff;
   line-height: 1.5rem;
-  padding: 10px 20px;
+  padding: 13px 20px;
   margin: 0;
-  border-bottom: 1px solid #e0e0e0;
+  /*border-bottom: 1px solid #e0e0e0;*/
 }
 
 .collection .collection-item.avatar {
-  min-height: 84px;
+  min-height: 73px;
   padding-left: 72px;
   position: relative;
 }
@@ -3103,8 +3105,8 @@ td, th {
 .collection .collection-item.avatar:not(.circle-clipper) > .circle,
 .collection .collection-item.avatar :not(.circle-clipper) > .circle {
   position: absolute;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   overflow: hidden;
   left: 15px;
   display: inline-block;
@@ -3138,8 +3140,8 @@ td, th {
 }
 
 .collection .collection-item.active {
-  background-color: #26a69a;
-  color: #eafaf9;
+  background-color: #EFEFEF;
+  color: #333;
 }
 
 .collection .collection-item.active .secondary-content {
@@ -3436,7 +3438,7 @@ table span.badge {
 
 @media only screen and (min-width: 601px) {
   .container {
-    width: 85%;
+    width: 90%;
   }
 }
 

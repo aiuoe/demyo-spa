@@ -16,7 +16,7 @@ export function extract(value: any, len: number)
 {
 	if (!value) return ''
   value = value.toString()
-  return value.substr(0, len).trim().concat('...')
+  return value.substr(0, len).trim().concat('')
 }
 
 export function date(value: any)

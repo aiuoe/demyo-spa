@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Login from '../views/Login.vue'
-import Home from '../views/Home.vue'
+import Signup from '../views/Signup.vue'
+// import Home from '../views/Home.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Users from '../views/Users.vue'
 import Conversation from '../views/Conversation.vue'
 import Profile from '../views/Profile.vue'
 import Search from '../views/Search.vue'
 import Photo from '../views/Photo.vue'
+import Match from '../views/Match.vue'
 
 Vue.use(VueRouter)
 
@@ -15,7 +17,15 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: '',
-    component: Home,
+    component: Signup,
+    meta: {
+      islogged: true
+    }
+  },
+  {
+    path: '/login',
+    name: '',
+    component: Login,
     meta: {
       islogged: true
     }
@@ -69,6 +79,14 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
+    path: '/match',
+    name: 'match',
+    component: Match,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/search',
     name: 'search',
     component: Search,
@@ -85,7 +103,8 @@ const routes: Array<RouteConfig> = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+  linkActiveClass: "active"
 })
 
 router.beforeEach((to, from, next) => {

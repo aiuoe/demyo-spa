@@ -12,7 +12,8 @@ export default new Vuex.Store({
 		messages: new Array<any>(),
 		friends: new Array<any>(),
 		friendRequests: new Array<any>(),
-		users: new Array<any>()
+		users: new Array<any>(),
+		page: 1
 	},
 	getters: {
 		me_id: state => 
@@ -54,12 +55,18 @@ export default new Vuex.Store({
 		users: state =>
 		{
 			return state.users
+			.filter((u: any) => u.id != state.me_id)
+			.paginate(state.page, 5)
 		}
 	},
 	mutations: {
 		meSet(state, value)
 		{
 			state.me_id = value
+		},
+		pageSet(state, value)
+		{
+			state.page = value
 		},
 		conversationSet(state, value)
 		{
@@ -99,6 +106,10 @@ export default new Vuex.Store({
 		async meSet({commit}, value)
 		{
 			commit('meSet', value)  		
+		},
+		async pageSet({commit}, value)
+		{
+			commit('pageSet', value)  		
 		},
 		async conversationSet({commit}, value)
 		{

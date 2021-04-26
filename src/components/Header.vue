@@ -1,28 +1,44 @@
 <template lang="pug">
-header(class="header center" id="header")
-  div(class="container header_container")
-    a(href="index.php" class="header_logo")
-      div(class="logo_img")
-        img(class="images" src="img/logo2.svg" alt="logo")
-      div(class="logo_text")
-        h1 SwingUA
-    nav(class="main_nav")
-      a(@click="router('search')" class="nav_item")
-        i(class="fa fa-search")
-        span найти
-      a(@click="router('conversations')" class="nav_item")
-        i(class="fa fa-envelope")
-        span Сообщения
-      a(@click="router('conversations')" class="nav_item")
-        i(class="fa fa-map-marker-alt")
-        span поблизости
-      a(@click="router('conversations')" class="nav_item")
-        i(class="fa fa-heart")
-        span Yведомления
-      a(@click="router('profile')" class="nav_item active")
-        i(class="fa fa-user-alt")
-        span профиль
-  div(class="border")
+header(class="navbar-fixed")
+  nav(class="bg__header")
+    div(class="nav-wrapper container")
+      a(href="#!" class="brand-logo left") SwingRU
+      ul(class="right hide-on-small-only")
+        li
+          router-link(to="match")
+            i(class="material-icons") favorite_border
+        li
+          router-link(to="conversations")
+            i(class="material-icons") mail_outline
+        li
+          router-link(to="search")
+            i(class="material-icons") place
+
+        li
+          router-link(to="notifications")
+            i(class="material-icons") notifications_none
+        li
+          a(@click="show" class="dropdown-trigger valign-wrapper" data-target="dropdown1")
+            i(class="material-icons") account_circle
+            i(class="material-icons") arrow_drop_down
+          ul(id="dropdown1" class="dropdown-content b__radius" v-show="dropdown")
+            li
+              a(href="profile.php" class="grey-text text-darken-2")
+                i(class="material-icons left") account_circle
+                span профиль
+            li
+              a(href="#" class="grey-text text-darken-2")
+                i(class="material-icons") settings
+                span параметр
+            li
+              a(href="#" class="grey-text text-darken-2")
+                i(class="material-icons") mode_edit
+                span пароль
+            li(class="divider")
+            li
+              a(@click="logout" class="grey-text text-darken-2")
+                i(class="material-icons") power_settings_new
+                span выйти  
 </template>
 
 <script lang="ts">
@@ -64,6 +80,13 @@ export default class Header extends Vue
   friendUpsert!: (value: any) => void
   friendRequestUpsert!: (value: any) => void
   userUpsert!: (value: any) => void
+  dropdown: boolean = false
+
+  show()
+  {
+    this.dropdown = !this.dropdown
+    console.log('click')
+  }
 
   async created()
   {
@@ -144,8 +167,17 @@ export default class Header extends Vue
 </script>
 
 <style scoped lang="sass">
+#dropdown1
+  width: 100px
+  opacity: 1
+  display: block
+  top: 70px
+  left: 68vw
+
+header
+  width: 100vw
+
 .header
-  width: 100%
   height: 3.2rem
   background: #fff
   box-shadow: 0px 0px 2px 1px rgba(0,0,0, .15)
@@ -247,7 +279,7 @@ export default class Header extends Vue
     transition: background-color 0.1s ease-out
     box-shadow: 0px 0px 2px 1px rgba(0,0,0, .15)
 
-  .main_nav .nav_item.active
+  .active
     color: #fff
     background-color: rgba(236, 47, 75, .93)
     box-shadow: 0px 0px 2px 1px rgba(0,0,0, .15)

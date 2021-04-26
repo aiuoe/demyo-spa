@@ -10,38 +10,45 @@ div(class="father")
 					<p>SwingRU</p>
 				</div>
 				<div class="center__login three">
-					<a href="#" class="btn waves-effect waves-light btn__login">регистрироваться</a>
+					<a @click="toLogin" class="btn waves-effect waves-light btn__login">авторизоваться</a>
+				</div>
+				<div class="center__login four">
+					<a href="index.php" class="btn waves-effect waves-light btn__login"><i class="material-icons">login</i></a>
 				</div>
 			</div>
 		</header>
-		<div class="main__box container__login row">
+		<div class="main__box container__login row animate__animated animate__fadeIn">
 			<div class="box__register">
+				<div class="box2 center__login">
+					<img src="/img/logo5.svg" alt="logo">
+				</div>
 				<div class="box1">
 					<div class="center">
-						<p class="title">Авторизоваться</p>
+						<p class="title">Регистрироваться</p>
 					</div>
 					<div class="row input__box">
-						<form @submit.prevent="login" class="col s12">
+						<form class="col s12">
 							<div class="input-field col s12">
-								<input v-model="email" type="email" id="email" class="validate" required="">
-								<label for="email">электронное письмо</label>
-								<span class="helper-text" data-error="напишите действующий адрес электронной почты" data-success=""></span>
+								<input id="name" type="text" class="validate" required="">
+										<label for="name">Имя</label>
 							</div>
 							<div class="input-field col s12">
-								<input v-model="password" id="password" type="password" class="validate" required="">
+								<input id="apellido" type="text" class="validate" required="">
+										<label for="apellido">фамилия</label>
+							</div>
+							<div class="input-field col s12">
+								<input type="email" id="email" class="validate" required="">
+								<label for="email">электронное письмо</label>
+							</div>
+							<div class="input-field col s12">
+								<input id="password" type="password" class="validate" required="">
 										<label for="password">пароль</label>
 							</div>
 							<div class="center">
-								<button class="btn red darken-2 border__radius waves-effect waves-light" type="submit">авторизоваться</button>
+								<button class="btn red darken-2 border__radius waves-effect waves-light" type="submit">Регистрироваться</button>
 							</div>
 						</form>
 					</div>
-					<div class="center f_password">
-						<a href="#" class="password">Забыли свой пароль?</a>
-					</div>
-				</div>
-				<div class="box2 center__login">
-					<img src="img/logo6.svg" alt="logo">
 				</div>
 			</div>
 		</div>
@@ -56,30 +63,18 @@ div(class="father")
 import { Component, Vue } from 'vue-property-decorator'
 import axios from 'axios'
 
-declare const M: any;
-
 @Component
-export default class Home extends Vue 
+export default class Signup extends Vue 
 {
-	email: string = ''
-	password: string = ''
-
-	async login()
+	toLogin()
 	{
-		await axios
-    .post(`${process.env.VUE_APP_API_URL}/api/auth/login`, {email: this.email, password: this.password})
-		.then((res: any) => 
-		{
-			window.localStorage.setItem('token', res['data']['access_token'])
-			this.$router.push({path: 'dashboard'}).catch((err: any) => err)
-		})
-		.catch((err: any) => M.toast({html: 'неверный пароль', classes: 'red darken-3'}))
+		this.$router.push({path: '/login'})
 	}
 }
 </script>
 
 <style scoped lang="scss">
-.father
+body
 {
 	background: #f6f6f6;
 }
@@ -118,6 +113,7 @@ export default class Home extends Vue
 	height: 4.3rem;
 	display: flex;
 	align-items: center;
+	overflow: hidden;
 }
 
 .header__login .one
@@ -149,7 +145,6 @@ export default class Home extends Vue
 .border__radius
 {
 	border-radius: 7px;
-	color: #fff;
 }
 
 .btn.btn__login
@@ -180,16 +175,17 @@ export default class Home extends Vue
 	width: 85%;
 	margin-top: 6rem;
 	margin-bottom: 4rem;
+	overflow: hidden;
+	border-radius: 10px;
+	box-shadow: 0 20px 40px rgb(0 0 0 / 10%);
 }
 
 .main__login .box__register
 {
 	width: 100%;
 	height: 83.5vh;
-	background: #fafafa;
-	border-radius: 10px;
-	box-shadow: 0 20px 40px rgb(0 0 0 / 10%);
 	display: flex;
+	background: #fafafa;
 }
 
 .main__login .box__register .box1
@@ -199,16 +195,16 @@ export default class Home extends Vue
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	position: relative;
+	position: relative; 
 }
 
 .box__register .row .input-field
 {
 	margin-top: 0rem;
-	margin-bottom: 0.4rem;
+	margin-bottom: 1.05rem;
 }
 
-.box__register .row .input-field:nth-child(2)
+.box__register .row .input-field:nth-child(4)
 {
 	margin-bottom: 1.5rem;
 }
@@ -220,36 +216,19 @@ export default class Home extends Vue
 	margin-top: 0;
 }
 
-.main__login .box__register .box1 .f_password
-{
-	position: absolute;
-	bottom: 1.8rem;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.main__login .box__register .box1 .password
-{
-	color: #777;
-	font-size: 1.1rem;
-}
-
 .main__login .box__register .box2
 {
 	width: 50%;
 	height: 100%;
 	background: #f6f6f6;
-	border-top-right-radius: 10px;
-	border-bottom-right-radius: 10px;
 	display: none;
+	border-top-left-radius: 10px;	
+	border-bottom-left-radius: 10px;	
 }
 
 .main__login .box__register .box2 img
 {
 	width: 65%;
-	
 	height: 65%;
 }
 
@@ -268,6 +247,7 @@ export default class Home extends Vue
 	align-items: center;
 	position: relative;
 	padding: 0 6%;
+	overflow: hidden;
 }
 
 .footer__login .divider__login
@@ -286,7 +266,8 @@ export default class Home extends Vue
 	letter-spacing: 0.5px;
 }
 
-@media only screen and (min-width: 568px){
+@media only screen and (min-width: 568px)
+{
 	.header__login .three
 	{
 		display: flex;
@@ -294,12 +275,17 @@ export default class Home extends Vue
 
 	.header__login .two
 	{
-		margin-right: -8rem;
+		margin-right: -7.85rem;
 	}
 
 	.input__box
 	{
 		width: 90%;
+	}
+
+	.four
+	{
+		display: none;
 	}
 }
 
@@ -327,12 +313,7 @@ export default class Home extends Vue
 
 	.header__login
 	{
-		// background-image: linear-gradient(rgba(0, 0, 0, .45), rgba(0,0,0, .03)), url(img/2.jpg);
-	}
-
-	.main__login .box__register .box1 .f_password
-	{
-		bottom: 1.3rem;
+		background-image: linear-gradient(rgba(0, 0, 0, .45), rgba(0,0,0, .03)), url('/img/2.jpg');
 	}
 }
 </style>

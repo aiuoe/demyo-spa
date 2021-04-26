@@ -1,14 +1,13 @@
 <template lang="pug">
-	div.menu
-		Menu
+Header
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import Menu from '@/components/Menu.vue'
+import { Component, Vue } from 'vue-property-decorator'
+import Header from '@/components/Header.vue'
 
 @Component({
-	components: { Menu }
+	components: { Header }
 })
 export default class Login extends Vue 
 {

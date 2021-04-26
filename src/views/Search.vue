@@ -1,49 +1,61 @@
 <template lang="pug">
 div(class="container-fluid")
 	Header
-	main(class="main")
-		div(class="container_users center")
-			div(class="container container_u")
-				div(class="box_users box")
-					div(class="title")
-						div(class="title_name")
-							p люди поблизости
-						div(class="items")
-							button(class="icon center" onclick="openFilter()")
-								i(class="fa fa-sliders-h")
-								div(class="select")
-								button(id="button" class="button")
-									span(id="select-label") Все
-									i(class="fa fa-angle-down")
-								div(class="dropdown hidden" id="dropdown")
-									input(type="radio" id="select-all" name="where" value="all" class="option")
-									label(for="select-all" class="select-item") Все
-									input(type="radio" id="select-new" name="where" value="new" class="option")
-									label(for="select-new" class="select-item") Новый
-									input(type="radio" id="select-online" name="where" value="online" class="option")
-									label(for="select-online" class="select-item") Сейчас в сети
-					//- div(id="filter")
-					ul(class="user")
-						li(class="user_card" v-for="user in users" v-if="user.id != me_id")
-							img(class="user_card" src="https://res.cloudinary.com/demo/image/upload/v1565124833/eden_group.jpg")
-							div(class="profile")
-								div(class="name") 
-									span {{ user.name | capitalize }}
-									span  {{ user.age }}
-								div(class="local")
-									i(class="fa fa-map-marker-alt")
-									span 20 км от тебя
+	span(v-if="!users.length") no hay usuarios para mostrar
+	<main class="container" v-if="users.length">
+		<div class="row section">
+			<div class="card b__radius">
+				<div class="card-content card_center">
+					<div class="title">
+						<span>люди поблизости</span>
+					</div>
+					<div class="flex_box">
+						<div class="tools">
+							<a class="waves-effect waves-light btn-small right blue darken-2 modal-trigger">
+								<i class="material-icons center">tune</i>
+							</a>
+						</div>
+						<div class="input-field">
+							<select>
+								<option value="all" selected>все</option>
+								<option value="new">новый</option>
+								<option value="online">онлайн</option>
+								</select>
+							</div>
+					</div>
+				</div>
+				<div class="card-content setting" id="setting"></div>
+				<div class="card-content box_users">
+					<ul class="row content__img">
+						<li v-for="user in users" class="col s12 m4 l3">
+							<img class="responsive-img b__radius" src="img/user.jpg" alt="">
+							<a href="#" class="data">
+								<div class="data_title">
+									<span class="title"> {{ user.name | extract(10) }}</span>
+									<span class="age"> {{ user.age }} </span>
+									<div class="status green"></div>
+								</div>
+								<span class="city"><i class="material-icons">place</i>Rusia, center</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</main>
+	Footer
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { capitalize } from '@/modules/filter'
+import { capitalize, upperCase,  extract } from '@/modules/filter'
 import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue'
 
 @Component({
-	components: { Header },
-	filters: {capitalize: capitalize},
+	components: { Header, Footer },
+	filters: {capitalize: capitalize, extract: extract, upperCase: upperCase},
 	computed: 
 	{
 		...mapGetters(['me_id', 'users'])
@@ -55,201 +67,158 @@ export default class Login extends Vue
 }
 </script>
 
-<style scoped lang="sass">
-.container_users
-	width: 100%
-	height: auto
-	position: relative
-	margin-top: 1.3rem
-	margin-bottom: 1.5rem
+<style scoped lang="scss">
+.container-fluid
+{
+	width: 100vw;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	overflow-x: hidden;
+}
 
-.container_u
-	display: flex
-	flex-direction: column
+main
+{
+	padding-bottom: 2.5rem;
+}
 
-.box_users
-	width: 100%
-	height: auto
-	display: flex
-	flex-direction: column
+.input-field
+{
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
 
-.box_users .title
-	width: 100%
-	height: 3.5rem
-	display: flex
-	justify-content: space-between
-	align-items: center
-	padding: 0 1rem
+.card_center
+{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin-bottom: -1rem;
+}
 
-.box_users .title .title_name
-	display: flex
-	justify-content: center
-	align-items: center
-	font-size: 1.15rem
+.flex_box
+{
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	margin-top: 1rem;
+}
 
-.box_users .title .items
-	display: flex
-	align-items: center
+.flex_box .tools
+{
+	margin-right: 1.3rem;
+}
 
-.box_users .title .icon
-	width: 38px
-	height: 38px
-	color: #555
-	cursor: pointer
-	border-radius: 6px
-	background: transparent
-	border: 1px solid #bebebe
-	font-size: 1.03rem
-	outline: none
+.card-content span
+{
+	font-size: 1.3rem;
+}
 
-.box_users .title .icon:hover
-	background: #f2f2f2
+.setting
+{
+	background: #f6f6f6;
+	border-top: 2px solid #e0e0e0;
+	height: 150px;
+	transition: all 2s;
+	display: none;
+}
 
-.box_users .title .icon:active
-	background: #fafafa
+.row.content__img
+{
+	margin-bottom: 0;
+	margin-top: 0;
+}
 
-.select
-	position: relative
-	margin-left: 0.5rem
+.content__img li
+{
+	margin-top: 1rem;
+	position: relative;
+}
 
-.button
-	height: 38px
-	width: 100%
-	padding: 0rem 0.85rem 0 0.85rem
-	display: flex
-	justify-content: space-between
-	align-items: center
-	border-radius: 6px
-	background: transparent
-	border: 1px solid #bebebe
-	position: relative
-	cursor: pointer
-	outline: none
+.card-content.box_users
+{
+	padding-top: 0.5rem;
+}
 
-.button:hover
-	background: #f2f2f2
+.content__img li .data
+{
+	width: 100%;
+	bottom: 0;
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	padding: 0 17px 18px 17px; 
+}
 
-.button:active
-	background: #fafafa
+.content__img li .data_title
+{
+	display: flex;
+	align-items: center;
+}
 
-.fa-angle-down
-	font-size: 1.1rem
-	padding-left: 0.6rem
+.content__img li .data .title
+{
+	color: #fff;
+	font-size: 22px;
+	font-weight: 700;
+	letter-spacing: 0.2px;
+	text-indent: 2px;
+	text-shadow: 1px 1px 3px #444;
+	margin-right: 10px;
+}
 
-.dropdown
-	top: 122%
-	right: 0
-	width: 10rem
-	position: absolute
-	border: 1px solid #bebebe
-	border-radius: 6px
-	overflow: hidden
-	z-index: 5
+.content__img li .data .age
+{
+	font-size: 19px;
+	font-weight: 700;
+	letter-spacing: 0.2px;
+	text-indent: 2px;
+	text-shadow: 1px 1px 3px #444;
+}
 
-.option
-	display: none
+.content__img li .data .city
+{
+	font-size: 17px;
+	margin-top: -4px;
+	text-shadow: 1px 1px 3px #444;
+	display: flex;
+	align-items: center;
+}
 
-.select-item
-	display: block
-	padding: 0.7rem 1rem
-	color: #222
-	cursor: pointer
-	background: #fff
+.content__img li .data .city i
+{
+	font-size: 19px;
+}
 
-.select-item:hover
-	background: #f2f2f2
+@media only screen and (min-width: 550px)
+{
+	.card_center
+	{
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
 
-.hidden
-	display: none
+	.flex_box
+	{
+		justify-content: flex-end;
+		margin-top: 0;
+	}
 
-.filter
-	width: 100%
-	height: 200px
-	background: #f6f6f6
-	border-top: 2px solid #e0e0e0
+	.flex_box .input-field
+	{
+		width: 45%;
+	}
+}
 
-.user
-	width: 100%
-	display: grid
-	grid-template-columns: repeat(2, auto)
-	grid-gap: 1rem
-	justify-content: center
-	list-style: none
-	padding: 1rem 1rem 1rem 1rem
-	position: relative
-	overflow: hidden
-
-.user .user_card
-	width: 135px
-	height: 194px
-	cursor: pointer
-	border-radius: 8px
-	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, .3) 
-	position: relative
-	z-index: 0
-
-.user .user_card:hover .profile
-	background: rgba(248, 248, 248, 0.15)
-	backdrop-filter: blur(4px)
-	-webkit-backdrop-filter: blur(4px)
-
-.user .user_card .profile
-	width: 100%
-	height: 30%
-	display: flex
-	flex-direction: column
-	align-items: center
-	justify-content: center
-	position: absolute
-	bottom: 0
-	border-bottom-left-radius: 8px
-	border-bottom-right-radius: 8px 
-
-.user .user_card .profile .name
-	width: 100%
-	height: 50%
-	color: #fff
-	font-size: 20px
-	font-weight: 700
-	letter-spacing: 0.5px
-	text-shadow: 1px 1px 3px #444
-
-.user .user_card .profile .name span
-	font-size: 14px
-
-.user .user_card .profile .local
-	width: 100%
-	display: flex
-	justify-content: center
-	align-items: flex-start
-	padding: 0 0 20px 0
-
-.user .user_card .profile .local i
-	color: #fff
-
-.user .user_card .profile .local span
-	color: #fff
-	padding: 0 10px
-	text-shadow: 1px 1px 3px #444
-
-@media screen and (min-width: 768px)
-
-
-@media screen and (min-width: 1024px)
-	.box_users .title
-		height: 4.2rem
-		padding: 0 2.1rem
-
-	.user
-		grid-template-columns: repeat(5, auto)
-		grid-gap: 2rem
-		padding: 1.5rem 2.1rem 1.5rem 2.1rem
-
-	.user .user_card
-		width: 195px
-		height: 254px
-
-	.dropdown
-		left: 0
-
+@media only screen and (min-width: 768px)
+{
+	main
+	{
+		padding-bottom: 0rem;
+	}
+}
 </style>

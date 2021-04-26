@@ -5,6 +5,7 @@ interface Array<T>
 	orderBy(params: any): any
 	where(key: string, operator: string, value: string): any
 	get(id: number): any
+	paginate(page: number, max: number): any
 }
 
 Array.prototype.upsert = function (item: any): any
@@ -60,4 +61,14 @@ Array.prototype.where = function (key: string, operator: string, value: string)
 Array.prototype.get = function (id: number): any
 {
 	return this[this.findIndex((i: any) => i.id == id)]
+}
+
+Array.prototype.paginate = function (page: number, max: number = 5): any
+{
+	let index = (page - 1) * max
+	let last = (Math.round(this.length / max) - 1) * max
+	if (index < this.length)
+		return this.slice(index, index + max)
+	else
+		return this.slice(last, index + max)	
 }

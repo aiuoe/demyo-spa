@@ -34,5 +34,25 @@ friendRequests($page: Int!)
   }
 }`)
 
-// export const FRIEND_UPSERT = gql(``)
+export const FRIEND_REQUEST_SEND = gql(`mutation($friend_id: ID!)
+{
+  friendRequest(friend_id: $friend_id)
+  {
+    id
+    friend_id
+    {
+      id
+      name
+      lastname
+      country
+      age
+    }
+  }
+}`)
+
+export const FRIEND_REQUEST_ACCEPT = gql(`mutation($id: ID!)
+{
+  friendRequestAccept(id: $id)
+}`)
+
 // export const FRIEND_DELETE = gql(``)

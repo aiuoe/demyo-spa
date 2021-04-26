@@ -1,8 +1,5 @@
 <template lang="pug">
 div
-	div.menu
-		Menu
-
 	div.main
 		span.subtitle(v-if="friendrequests.length") Requests
 		hr.divider(v-if="friendrequests.length")
@@ -39,13 +36,11 @@ div
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Menu from '@/components/Menu.vue'
 import gql from 'graphql-tag';
 import { capitalize } from '@/modules/filter'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 @Component({
-	components: { Menu },
 	filters: {capitalize: capitalize},
 	methods:
 	{
@@ -135,32 +130,6 @@ export default class Users extends Vue
 	{
 		this.friendSet(id)
 		this.$router.push('conversations').catch(err => err)
-	}
-
-	async sendFriendRequest(friend_id: number)
-	{
-		this.$apollo.mutate({
-			mutation: gql(`mutation($friend_id: ID!)
-			{
-				friendRequest(friend_id: $friend_id)
-				{
-					id
-					friend_id
-					{
-						id
-						name
-						lastname
-						country
-						age
-					}
-				}
-			}`),
-			variables: {
-				friend_id: friend_id
-			}
-		})
-		.then(res => console.log(res))
-		.catch(err => console.log(err))
 	}
 
 	async friendRequestAccept(id: number)
