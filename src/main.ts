@@ -15,7 +15,6 @@ import { setContext } from 'apollo-link-context'
 
 Vue.use(VueApollo)
 
-
 const httpLink = setContext(() => ({headers: {authorization: `Bearer ${window.localStorage.getItem('token')}`}})).concat(createHttpLink({uri: `${process.env.VUE_APP_API_URL}/graphql`}))
 
 const cache = new InMemoryCache()

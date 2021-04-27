@@ -11,17 +11,17 @@ div(class="container-fluid")
 					</div>
 					<div class="flex_box">
 						<div class="tools">
-							<a class="waves-effect waves-light btn-small right blue darken-2 modal-trigger">
+							<a class="waves-effect waves-light btn-small right blue darken-1 b__radius modal-trigger">
 								<i class="material-icons center">tune</i>
 							</a>
 						</div>
 						<div class="input-field">
-							<select>
+							<select v-model="selection">
 								<option value="all" selected>все</option>
 								<option value="new">новый</option>
 								<option value="online">онлайн</option>
-								</select>
-							</div>
+							</select>
+						</div>
 					</div>
 				</div>
 				<div class="card-content setting" id="setting"></div>
@@ -53,6 +53,8 @@ import { capitalize, upperCase,  extract } from '@/modules/filter'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
+declare const M: any;
+
 @Component({
 	components: { Header, Footer },
 	filters: {capitalize: capitalize, extract: extract, upperCase: upperCase},
@@ -63,7 +65,25 @@ import Footer from '@/components/Footer.vue'
 })
 export default class Login extends Vue 
 {
+	selection: any = null
 
+	select()
+	{
+		console.log(this.$refs)
+	}
+
+
+	async mounted()
+	{
+	  var elems = document.querySelectorAll('select');
+	  var options = { }
+	  var instances = M.FormSelect.init(elems, options);
+	}
+
+	async updated()
+	{
+		console.log(this.selection)
+	}
 }
 </script>
 

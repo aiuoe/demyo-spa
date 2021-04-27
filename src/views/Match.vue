@@ -14,7 +14,7 @@ div(class="container-fluid")
 					div(class="botons")
 						a(@click="send" class="btn waves-effect waves-gray")
 							i(class="material-icons red-text text-darken-1") favorite
-						a(class="btn waves-effect waves-gray")
+						a(@click="close" class="btn waves-effect waves-gray")
 							i(class="material-icons grey-text") close
 				ul(class="col s12 m5 l5 data" v-if="user != null")
 					li(class="name_user") {{ user.name }}
@@ -75,7 +75,7 @@ export default class Match extends Vue
 
 	async send()
 	{
-		this.$apollo.mutate({
+		await this.$apollo.mutate({
 			mutation: FRIEND_REQUEST_SEND,
 			variables: {
 				friend_id: this.user.id
@@ -87,6 +87,12 @@ export default class Match extends Vue
 			.delete(this.user.id)
 		})
 		.catch(err => console.log(err))
+	}
+
+	close()
+	{
+		this.$store.state.users
+		.delete(this.user.id)
 	}
 
 	async accept(id: number)

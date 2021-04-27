@@ -4,12 +4,12 @@ import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
 // import Home from '../views/Home.vue'
 import Dashboard from '../views/Dashboard.vue'
-import Users from '../views/Users.vue'
 import Conversation from '../views/Conversation.vue'
 import Profile from '../views/Profile.vue'
 import Search from '../views/Search.vue'
 import Photo from '../views/Photo.vue'
 import Match from '../views/Match.vue'
+import Complete from '../views/Complete.vue'
 
 Vue.use(VueRouter)
 
@@ -34,14 +34,6 @@ const routes: Array<RouteConfig> = [
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/users',
-    name: 'users',
-    component: Users,
     meta: {
       requiresAuth: true
     }
@@ -95,6 +87,14 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
+    path: '/complete',
+    name: 'complete',
+    component: Complete,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '*',
     redirect: '/'
   }
@@ -121,7 +121,7 @@ router.beforeEach((to, from, next) => {
 router.beforeEach((to, from, next) => {
    if (to.matched.some(record => record.meta.islogged)) {
     if (window.localStorage.getItem('token') != null) 
-      next('/dashboard')
+      next('/match')
     else 
       next()
   } else {

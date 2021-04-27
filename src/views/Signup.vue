@@ -27,21 +27,21 @@ div(class="father")
 						<p class="title">Регистрироваться</p>
 					</div>
 					<div class="row input__box">
-						<form class="col s12">
+						<form @submit.prevent="signup" class="col s12">
 							<div class="input-field col s12">
-								<input id="name" type="text" class="validate" required="">
+								<input v-model="name" id="name" type="text" class="validate" required="">
 										<label for="name">Имя</label>
 							</div>
 							<div class="input-field col s12">
-								<input id="apellido" type="text" class="validate" required="">
+								<input v-model="lastname" id="apellido" type="text" class="validate" required="">
 										<label for="apellido">фамилия</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="email" id="email" class="validate" required="">
+								<input v-model="email" type="email" id="email" class="validate" required="">
 								<label for="email">электронное письмо</label>
 							</div>
 							<div class="input-field col s12">
-								<input id="password" type="password" class="validate" required="">
+								<input v-model="password" id="password" type="password" class="validate" required="">
 										<label for="password">пароль</label>
 							</div>
 							<div class="center">
@@ -63,9 +63,39 @@ div(class="father")
 import { Component, Vue } from 'vue-property-decorator'
 import axios from 'axios'
 
+declare const M: any;
+
 @Component
 export default class Signup extends Vue 
 {
+  name: string = ''
+  lastname: string = ''
+  email: string = ''
+  password: string = ''
+
+  async signup()
+  {
+   await axios
+   .post(`${process.env.VUE_APP_API_URL}/api/auth/signup`, {
+      name: this.name,
+      lastname: this.lastname,
+      email: this.email,
+      password: this.password,
+   })
+   .then((res: any) => 
+   {
+		axios
+    .post(`${process.env.VUE_APP_API_URL}/api/auth/login`, {email: this.email, password: this.password})
+		.then((res: any) => 
+		{
+			window.localStorage.setItem('token', res['data']['access_token'])
+	  	this.$router.push({path: 'complete'}).catch((err: any) => err)
+		})
+		.catch((err: any) => M.toast({html: 'неверный пароль', classes: 'red darken-3'}))
+   })
+   .catch(err => console.log(err))
+  }
+
 	toLogin()
 	{
 		this.$router.push({path: '/login'})

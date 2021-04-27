@@ -3,7 +3,7 @@ header(class="navbar-fixed")
   nav(class="bg__header")
     div(class="nav-wrapper container")
       a(href="#!" class="brand-logo left") SwingRU
-      ul(class="right hide-on-small-only")
+      ul(class="right hide-on-small-only" v-if="nav")
         li
           router-link(to="match")
             i(class="material-icons") favorite_border
@@ -81,6 +81,7 @@ export default class Header extends Vue
   friendRequestUpsert!: (value: any) => void
   userUpsert!: (value: any) => void
   dropdown: boolean = false
+  nav: boolean = true
 
   show()
   {
@@ -90,6 +91,9 @@ export default class Header extends Vue
 
   async created()
   {
+    if (location.pathname == '/complete')
+      this.nav = false
+
     this.$apollo.query({
       query: gql(`query
       {
