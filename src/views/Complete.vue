@@ -12,100 +12,30 @@ div(class="container-fluid")
 						</div>
 					</div>
 					<div class="divider box"></div>
-					<form>
+					<form @submit.prevent="upsert">
 						<div class="card-content">
 							<div class="row">
 								<div class="input-field col s12 m4">
-									<select>
+									//- day
+									<select v-model="day">
 										<option value="" disabled selected>день</option>
-										<option value="1">1</option>
-										<option value="2">2</option>
-										<option value="4">4</option>
-										<option value="5">5</option>
-										<option value="6">6</option>
-										<option value="7">7</option>
-										<option value="8">8</option>
-										<option value="9">9</option>
-										<option value="10">10</option>
-										<option value="11">11</option>
-										<option value="12">12</option>
-										<option value="13">13</option>
-										<option value="14">14</option>
-										<option value="15">15</option>
-										<option value="16">16</option>
-										<option value="17">17</option>
-										<option value="18">18</option>
-										<option value="19">19</option>
-										<option value="20">20</option>
-										<option value="21">21</option>
-										<option value="22">22</option>
-										<option value="23">23</option>
-										<option value="24">24</option>
-										<option value="25">25</option>
-										<option value="26">26</option>
-										<option value="27">27</option>
-										<option value="28">28</option>
-										<option value="29">29</option>
-										<option value="30">30</option>
-										<option value="31">31</option>
+										<option v-for="day in days" :value="day.id" v-text="day.id"></option>
 									</select>
 									<label>Дата рождения</label>
 								</div>
 								<div class="input-field col s12 m4">
-									<select>
+									//- mounth
+									<select v-model="mounth">
 										<option value="" disabled selected>месяц</option>
-										<option value="jan">Январь</option>
-										<option value="feb">Февраль</option>
-										<option value="mar">маршировать</option>
-										<option value="apr">апреля</option>
-										<option value="may">Может</option>
-										<option value="jun">июнь</option>
-										<option value="jul">июль</option>
-										<option value="aug">август</option>
-										<option value="sep">сентябрь</option>
-										<option value="oct">Октябрь</option>
-										<option value="nov">Ноябрь</option>
-										<option value="dec">Декабрь</option>
+										<option v-for="mounth in mounths" :value="mounth.id" v-text="mounth.name"></option>
 									</select>
 									<label></label>
 								</div>
 								<div class="input-field col s12 m4">
-									<select>
+									//- year
+									<select v-model="year">
 										<option value="" disabled selected>год</option>
-										<option value="2003">2003</option>
-										<option value="2002">2002</option>
-										<option value="2001">2001</option>
-										<option value="2000">2000</option>
-										<option value="1999">1999</option>
-										<option value="1998">1998</option>
-										<option value="1997">1997</option>
-										<option value="1996">1996</option>
-										<option value="1995">1995</option>
-										<option value="1994">1994</option>
-										<option value="1993">1993</option>
-										<option value="1992">1992</option>
-										<option value="1991">1991</option>
-										<option value="1990">1990</option>
-										<option value="1989">1989</option>
-										<option value="1988">1988</option>
-										<option value="1987">1987</option>
-										<option value="1986">1986</option>
-										<option value="1985">1985</option>
-										<option value="1984">1984</option>
-										<option value="1983">1983</option>
-										<option value="1982">1982</option>
-										<option value="1981">1981</option>
-										<option value="1980">1980</option>
-										<option value="1979">1979</option>
-										<option value="1978">1978</option>
-										<option value="1977">1977</option>
-										<option value="1976">1976</option>
-										<option value="1975">1975</option>
-										<option value="1974">1974</option>
-										<option value="1973">1973</option>
-										<option value="1972">1972</option>
-										<option value="1971">1971</option>
-										<option value="1970">1970</option>
+										<option v-for="year in years" :value="year.id" v-text="year.id"></option>
 									</select>
 									<label></label>
 								</div>
@@ -116,7 +46,8 @@ div(class="container-fluid")
 							<div class="row">
 								<div class="input-field col s12">
 									<i class="material-icons prefix">comment</i>
-									<input id="icon_prefix" type="text" class="validate">
+									//- about me
+									<input v-model="about_me" id="icon_prefix" type="text" class="validate" required>
 									<label for="icon_prefix">Краткое описание вас</label>
 								</div>
 							</div>
@@ -125,33 +56,26 @@ div(class="container-fluid")
 						<div class="card-content">
 							<div class="row">
 								<div class="input-field col s12 m4">
-									<select>
+									//- genero estado
+									<select v-model="gender_id">
 										<option value="" disabled selected>статус</option>
-										<option value="1">мужчина</option>
-										<option value="2">женский</option>
-										<option value="3">пара мужчина + женщина</option>
-										<option value="4">пара мужчина + мужчина</option>
-										<option value="5">пара женщина + женщина</option>
+										<option v-for="gender in genders" v-bind:value="gender.id" v-text="gender.name"></option>
 									</select>
 									<label>пол / статус</label>
 								</div>	
 								<div class="input-field col s12 m4">
-									<select>
+									//- relationships
+									<select v-model="relationship_id">
 										<option value="" disabled selected>отношение</option>
-										<option value="a">В сложные отношения</option>
-										<option value="b">Один</option>
-										<option value="c">С парой</option>
+										<option v-for="relationship in relationships" :value="relationship.id" v-text="relationship.name"></option>
 									</select>
 									<label>отношение</label>
 								</div>
 								<div class="input-field col s12 m4">
-									<select>
+									//- wishes
+									<select v-model="wish_id">
 										<option value="" disabled selected>я хочу</option>
-										<option value="1">общаться и встречаться с людьми</option>
-										<option value="2">Выйти с кем-то</option>
-										<option value="3">Серьезные отношения</option>
-										<option value="4">который возникает</option>
-										<option value="5">найди любовь всей моей жизни</option>
+										<option v-for="wish in wishes" :value="wish.id" v-text="wish.name"></option>
 									</select>
 									<label>я хочу</label>
 								</div>
@@ -160,7 +84,8 @@ div(class="container-fluid")
 						<div class="divider box"></div>
 						<div class="card-content">
 							<span class="title_form">интересы</span>
-							<div class="chips chips-autocomplete">
+							<div class="chips">
+								//- hobbies
 								<input class="custom-class">
 							</div>	
 						</div>
@@ -168,67 +93,10 @@ div(class="container-fluid")
 						<div class="card-content">
 							<div class="row">
 								<div class="input-field col s12 m4">
-									<select>
+									//- city
+									<select v-model="city_id">
 										<option value="" disabled selected>положение</option>
-										<option value="1">Aleksandriya</option>
-										<option value="2">Bakhmut</option>
-										<option value="3">Belaya Tserkov</option>
-										<option value="4">Berdichev</option>
-										<option value="5">Berdyansk</option>
-										<option value="6">Borispol</option>
-										<option value="7">Brovary</option>
-										<option value="8">Cherkassy</option>
-										<option value="9">Chernigov</option>
-										<option value="10">Chernomorsk</option>
-										<option value="11">Chernovtsy</option>
-										<option value="12">Dnepr</option>
-										<option value="13">Energodar</option>
-										<option value="14">Gorishniye Plavni</option>
-										<option value="15">Irpen</option>
-										<option value="16">Ivano Frankovsk</option>
-										<option value="17">Izmail</option>
-										<option value="18">Kalush</option>
-										<option value="19">Kamenets Podolskiy</option>
-										<option value="20">Kamenskoye</option>
-										<option value="21">Kharkov</option>
-										<option value="22">Kherson</option>
-										<option value="23">Khmelnitskiy</option>
-										<option value="24">Kolomyya</option>
-										<option value="25">Konotop</option>
-										<option value="26">Konstantinovka</option>
-										<option value="27">Korosten</option>
-										<option value="28">Kovel</option>
-										<option value="29">Kremenchug</option>
-										<option value="30">Kropivnitskiy</option>
-										<option value="31">Kryvyi Rih</option>
-										<option value="32">Kyiv</option>
-										<option value="33">Lozovaya</option>
-										<option value="34">Lutsk</option>
-										<option value="35">Mariupol</option>
-										<option value="36">Melitopol</option>
-										<option value="37">Mukachevo</option>
-										<option value="38">Nezhin</option>
-										<option value="39">Nikolayev</option>
-										<option value="40">Nikopol</option>
-										<option value="41">Novograd Volynskiy</option>
-										<option value="42">Novomoskovsk</option>
-										<option value="43">Novovolynsk</option>
-										<option value="44">Odessa</option>
-										<option value="45">Pavlograd</option>
-										<option value="46">Pervomaysk</option>
-										<option value="47">Pokrovsk</option>
-										<option value="48">Poltava</option>
-										<option value="49">Priluki</option>
-										<option value="50">Rovno</option>
-										<option value="51">Shostka</option>
-										<option value="52">Smela</option>
-										<option value="53">Sumy</option>
-										<option value="54">Ternopol</option>
-										<option value="55">Uman</option>
-										<option value="56">Uzhgorod</option>
-										<option value="57">Vinnitsa</option>
-										<option value="58">Zaporozhye</option>
-										<option value="59">Zhitomir</option>
+										<option v-for="city in cities" v-bind:value="city.id">{{ city.name }}</option>
 									</select>
 									<label>место расположения</label>
 								</div>
@@ -245,16 +113,17 @@ div(class="container-fluid")
 			</div>
 		</div>
 	</main>
-	//- Footer
+	Footer
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
+import { mapState, mapActions, mapGetters } from 'vuex'
+import { capitalize } from '@/modules/filter'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import { capitalize } from '@/modules/filter'
-import { mapState, mapActions, mapGetters } from 'vuex'
-import { MESSAGE_UPSERT } from '@/graphql/message'
+import { USER_UPDATE } from '@/graphql/user'
+import { HOBBY_UPSERT } from '@/graphql/hobby'
 
 declare const M: any;
 
@@ -272,21 +141,250 @@ declare const M: any;
 })
 export default class Complete extends Vue 
 {
- async created()
- {
+	day: number = 0
+	mounth: number = 0
+	year: number = 0
+	birth_date: any = null
+	about_me: string = ''
+	city_id: number = 0
+	gender_id: number = 0
+	wish_id: number = 0
+	relationship_id: number = 0
+	hobbies: any = []
 
- }
+	cities: any = []
+	genders: any = []
+	wishes: any = []
+	relationships: any = []
+	mounths: any = []
+	days: any = []
+	years: any = []
 
- async mounted()
- {
+	async created()
+	{
+    this.cities = [
+			{id: 1, name: 'Aleksandriya'},
+			{id: 2, name: 'Bakhmut'},
+			{id: 3, name: 'Belaya Tserkov'},
+			{id: 4, name: 'Berdichev'},
+			{id: 5, name: 'Berdyansk'},
+			{id: 6, name: 'Borispol'},
+			{id: 7, name: 'Brovary'},
+			{id: 8, name: 'Cherkassy'},
+			{id: 9, name: 'Chernigov'},
+			{id: 10, name: 'Chernomorsk'},
+			{id: 11, name: 'Chernovtsy'},
+			{id: 12, name: 'Dnepr'},
+			{id: 13, name: 'Energodar'},
+			{id: 14, name: 'Gorishniye Plavni'},
+			{id: 15, name: 'Irpen'},
+			{id: 16, name: 'Ivano Frankovsk'},
+			{id: 17, name: 'Izmail'},
+			{id: 18, name: 'Kalush'},
+			{id: 19, name: 'Kamenets Podolskiy'},
+			{id: 20, name: 'Kamenskoye'},
+			{id: 21, name: 'Kharkov'},
+			{id: 22, name: 'Kherson'},
+			{id: 23, name: 'Khmelnitskiy'},
+			{id: 24, name: 'Kolomyya'},
+			{id: 25, name: 'Konotop'},
+			{id: 26, name: 'Konstantinovka'},
+			{id: 27, name: 'Korosten'},
+			{id: 28, name: 'Kovel'},
+			{id: 29, name: 'Kremenchug'},
+			{id: 30, name: 'Kropivnitskiy'},
+			{id: 31, name: 'Kryvyi Rih'},
+			{id: 32, name: 'Kyiv'},
+			{id: 33, name: 'Lozovaya'},
+			{id: 34, name: 'Lutsk'},
+			{id: 35, name: 'Mariupol'},
+			{id: 36, name: 'Melitopol'},
+			{id: 37, name: 'Mukachevo'},
+			{id: 38, name: 'Nezhin'},
+			{id: 39, name: 'Nikolayev'},
+			{id: 40, name: 'Nikopol'},
+			{id: 41, name: 'Novograd Volynskiy'},
+			{id: 42, name: 'Novomoskovsk'},
+			{id: 43, name: 'Novovolynsk'},
+			{id: 44, name: 'Odessa'},
+			{id: 45, name: 'Pavlograd'},
+			{id: 46, name: 'Pervomaysk'},
+			{id: 47, name: 'Pokrovsk'},
+			{id: 48, name: 'Poltava'},
+			{id: 49, name: 'Priluki'},
+			{id: 50, name: 'Rovno'},
+			{id: 51, name: 'Shostka'},
+			{id: 52, name: 'Smela'},
+			{id: 53, name: 'Sumy'},
+			{id: 54, name: 'Ternopol'},
+			{id: 55, name: 'Uman'},
+			{id: 56, name: 'Uzhgorod'},
+			{id: 57, name: 'Vinnitsa'},
+			{id: 58, name: 'Zaporozhye'},
+			{id: 59, name: 'Zhitomir'}
+		]
+  
+    this.genders = [
+			{id: 1, name: 'male'},
+			{id: 2, name: 'female'},
+			{id: 3, name: 'couple'},
+			{id: 4, name: 'male_couple'},
+			{id: 5, name: 'female_couple'}
+		]
+
+		this.wishes = [
+			{id: 1, name: 'общаться и встречаться с людьми'},
+			{id: 2, name: 'Выйти с кем-то'},
+			{id: 3, name: 'Серьезные отношения'},
+			{id: 4, name: 'который возникает'},
+			{id: 5, name: 'найди любовь всей моей жизни'}
+		]
+
+		this.relationships = [
+			{id: 1, name: 'В сложные отношения'},
+			{id: 2, name: 'Один'},
+			{id: 3, name: 'С парой'}
+		]
+
+		this.mounths = [
+			{id: 1, name: 'Январь'},
+			{id: 2, name: 'Февраль'},
+			{id: 3, name: 'маршировать'},
+			{id: 4, name: 'апреля'},
+			{id: 5, name: 'Может'},
+			{id: 6, name: 'июнь'},
+			{id: 7, name: 'июль'},
+			{id: 8, name: 'август'},
+			{id: 9, name: 'сентябрь'},
+			{id: 10, name: 'Октябрь'},
+			{id: 11, name: 'Ноябрь'},
+			{id: 12, name: 'Декабрь'}
+		]
+
+		this.days = [
+			{id: 1},
+			{id: 2},
+			{id: 3},
+			{id: 4},
+			{id: 5},
+			{id: 6},
+			{id: 7},
+			{id: 8},
+			{id: 9},
+			{id: 10},
+			{id: 11},
+			{id: 11},
+			{id: 12},
+			{id: 13},
+			{id: 14},
+			{id: 15},
+			{id: 16},
+			{id: 17},
+			{id: 18},
+			{id: 19},
+			{id: 20},
+			{id: 21},
+			{id: 22},
+			{id: 23},
+			{id: 24},
+			{id: 25},
+			{id: 26},
+			{id: 27},
+			{id: 28},
+			{id: 29},
+			{id: 30},
+			{id: 31}
+		]
+
+		this.years = [
+			{id: 2003},
+			{id: 2002},
+			{id: 2001},
+			{id: 2000},
+			{id: 1999},
+			{id: 1998},
+			{id: 1997},
+			{id: 1996},
+			{id: 1995},
+			{id: 1994},
+			{id: 1993},
+			{id: 1992},
+			{id: 1991},
+			{id: 1990},
+			{id: 1989},
+			{id: 1988},
+			{id: 1987},
+			{id: 1986},
+			{id: 1985},
+			{id: 1984},
+			{id: 1983},
+			{id: 1982},
+			{id: 1981},
+			{id: 1980},
+			{id: 1979},
+			{id: 1978},
+			{id: 1977},
+			{id: 1976},
+			{id: 1975},
+			{id: 1974},
+			{id: 1973},
+			{id: 1972},
+			{id: 1971},
+			{id: 1970}
+		]
+			
+	}
+
+	async upsert()
+	{
+		this.birth_date = `${this.year}-${this.mounth}-${this.day}`
+
+		document.querySelectorAll<any>(".chips")[0].M_Chips.chipsData.map((item: any) => 
+		{
+			this.hobbies.push(item.tag)
+		})
+
+		await this.$apollo.mutate({
+			mutation: USER_UPDATE,
+			variables: 
+			{
+				id: this.$store.state.me_id,
+		    birth_date: this.birth_date,
+    		about_me: this.about_me,
+    		gender_id: this.gender_id,
+    		relationship_id: this.relationship_id,
+    		wish_id: this.wish_id,
+    		city_id: this.city_id,
+			}
+		})
+		.then(res => console.log(res))
+		.catch(err => console.log(err))
+
+		await this.hobbies.map((h: string) => {
+			this.$apollo.mutate({
+				mutation: HOBBY_UPSERT,
+				variables: 
+				{
+					name: h
+				}
+			})
+			.then(res => console.log(res))
+			.catch(err => console.log(err))
+		})
+
+		this.$router.push({path: 'photos'})
+	}
+
+	async mounted()
+	{
 	  var elems = document.querySelectorAll('select');
 	  var options = { }
 	  var instances = M.FormSelect.init(elems, options);
 
 	  var elemtors = document.querySelectorAll('.chips');
-    var instances = M.Chips.init(elemtors, options);
+	  var instances = M.Chips.init(elemtors, options);
 
-   	const tags = document.querySelectorAll(".chips");
+	 	const tags = document.querySelectorAll(".chips");
 	   M.Chips.init(tags, {
 	     data:[{
 	       tag: 'Кино и ТВ'
@@ -319,17 +417,11 @@ export default class Complete extends Vue
 	       minLength: 1,
 	     }
 	   })
- }
+	}
 }
 </script>
 
 <style scoped lang="scss">
-
-// .chips
-// {
-// 	border: 0px;
-// }
-
 .container-fluid
 {
 	background: #fafafa;

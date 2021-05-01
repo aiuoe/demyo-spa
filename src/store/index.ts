@@ -13,7 +13,7 @@ export default new Vuex.Store({
 		friends: new Array<any>(),
 		friendRequests: new Array<any>(),
 		users: new Array<any>(),
-		page: 1
+		page: 1,
 	},
 	getters: {
 		me_id: state => 

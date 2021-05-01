@@ -91,7 +91,7 @@ export default class Header extends Vue
 
   async created()
   {
-    if (location.pathname == '/complete')
+    if (location.pathname == '/complete' || location.pathname == '/photos')
       this.nav = false
 
     this.$apollo.query({

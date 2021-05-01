@@ -44,8 +44,6 @@ export const FRIEND_REQUEST_SEND = gql(`mutation($friend_id: ID!)
       id
       name
       lastname
-      country
-      age
     }
   }
 }`)

@@ -76,7 +76,7 @@ export default class Login extends Vue
 		.then((res: any) => 
 		{
 			window.localStorage.setItem('token', res['data']['access_token'])
-			this.$router.push({path: 'dashboard'}).catch((err: any) => err)
+			this.$router.push({path: 'match'}).catch((err: any) => err)
 		})
 		.catch((err: any) => M.toast({html: 'неверный пароль', classes: 'red darken-3'}))
 	}

@@ -18,8 +18,6 @@ div(class="container-fluid")
 							i(class="material-icons grey-text") close
 				ul(class="col s12 m5 l5 data" v-if="user != null")
 					li(class="name_user") {{ user.name }}
-					li(class="age_user") возраст, {{ user.age }}
-					li(class="city_user") {{ user.country }}
 					li(class="title") Sobre mi
 					li(class="info_user") Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima sit nisi ea, fugiat voluptatem sapiente porro harum, atque, aperiam eveniet odio dolor hic, neque quod dolore corrupti quae consectetur repudiandae.
 					li(class="title") Relacion personal
