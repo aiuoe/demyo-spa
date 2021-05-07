@@ -1,8 +1,8 @@
 <template lang="pug">
 div(class="container-fluid")
 	Header
-	span(v-if="!users.length") no hay usuarios para mostrar
-	<main class="container" v-if="users.length">
+	span(v-if="!user_all.length") no hay usuarios para mostrar
+	<main class="container" v-if="user_all.length">
 		<div class="row section">
 			<div class="card b__radius">
 				<div class="card-content card_center">
@@ -27,15 +27,15 @@ div(class="container-fluid")
 				<div class="card-content setting" id="setting"></div>
 				<div class="card-content box_users">
 					<ul class="row content__img">
-						<li v-for="user in users" class="col s12 m4 l3">
+						<li v-for="user in user_all" class="col s12 m4 l3">
 							<img class="responsive-img b__radius" src="img/user.jpg" alt="">
 							<a href="#" class="data">
 								<div class="data_title">
 									<span class="title"> {{ user.name | extract(10) }}</span>
-									<span class="age"> {{ user.age }} </span>
+									<span class="age"> {{ user.birth_date | age }} </span>
 									<div class="status green"></div>
 								</div>
-								<span class="city"><i class="material-icons">place</i>Rusia, center</span>
+								<span class="city"><i class="material-icons">place</i>Россия, {{ user.city_id.name }}</span>
 							</a>
 						</li>
 					</ul>
@@ -49,7 +49,7 @@ div(class="container-fluid")
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { capitalize, upperCase,  extract } from '@/modules/filter'
+import { capitalize, upperCase,  extract, age } from '@/modules/filter'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
@@ -57,10 +57,10 @@ declare const M: any;
 
 @Component({
 	components: { Header, Footer },
-	filters: {capitalize: capitalize, extract: extract, upperCase: upperCase},
+	filters: {capitalize: capitalize, extract: extract, upperCase: upperCase, age: age},
 	computed: 
 	{
-		...mapGetters(['me_id', 'users'])
+		...mapGetters(['me_id', 'user_all'])
 	}
 })
 export default class Login extends Vue 

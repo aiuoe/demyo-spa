@@ -57,6 +57,11 @@ export default new Vuex.Store({
 			return state.users
 			.filter((u: any) => u.id != state.me_id)
 			.paginate(state.page, 5)
+		},
+		user_all: state =>
+		{
+			return state.users
+			.filter((u: any) => u.id != state.me_id)
 		}
 	},
 	mutations: {

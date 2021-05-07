@@ -225,10 +225,10 @@ export default class Complete extends Vue
 		]
   
     this.genders = [
-			{id: 1, name: 'male'},
-			{id: 2, name: 'female'},
-			{id: 3, name: 'couple'},
-			{id: 4, name: 'male_couple'},
+			{id: 1, name: 'мужской'},
+			{id: 2, name: 'женский'},
+			{id: 3, name: 'пара'},
+			{id: 4, name: 'мужская пара'},
 			{id: 5, name: 'female_couple'}
 		]
 
