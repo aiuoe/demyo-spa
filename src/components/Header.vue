@@ -51,7 +51,7 @@ import { MESSAGE_ALL } from '@/graphql/message'
 import { MESSAGE_SUBSCRIPTION } from '@/graphql/message'
 import { FRIEND_ALL } from '@/graphql/friend'
 import { FRIEND_REQUEST_ALL } from '@/graphql/friend'
-import { USER_ALL } from '@/graphql/user'
+import { USER_ALL, ME_ID } from '@/graphql/user'
 
 // others
 import gql from 'graphql-tag'
@@ -86,7 +86,6 @@ export default class Header extends Vue
   show()
   {
     this.dropdown = !this.dropdown
-    console.log('click')
   }
 
   async created()
@@ -94,42 +93,34 @@ export default class Header extends Vue
     if (location.pathname == '/complete' || location.pathname == '/photos')
       this.nav = false
 
-    this.$apollo.query({
-      query: gql(`query
-      {
-        me
-        {
-          id
-        }
-      }`)
-    })
+    this.$apollo.query({query: ME_ID})
     .then((res: any) => this.meSet(res.data.me.id))
-    .catch(error => console.log(error))
+    .catch(error => this.force_out())
 
     // conversations
     await this.$apollo.query({query: CONVERSATION_ALL, variables: {page: 1}})
     .then((res: any) => this.conversationUpsert(res.data.conversations))
-    .catch(error => console.log(error))
+    .catch(error => this.force_out())
 
     // messages
     await this.$apollo.query({query: MESSAGE_ALL, variables: {page: 1}})
     .then((res: any) => this.messageUpsert(res.data.messages))
-    .catch(error => console.log(error))
+    .catch(error => this.force_out())
 
     // friends
     await this.$apollo.query({query: FRIEND_ALL, variables: {page: 1}})
     .then((res: any) => this.friendUpsert(res.data.friends))
-    .catch(error => console.log(error))
+    .catch(error => this.force_out())
 
     // friends requests
     await this.$apollo.query({query: FRIEND_REQUEST_ALL, variables: {page: 1}})
     .then((res: any) => this.friendRequestUpsert(res.data.friendrequests))
-    .catch(error => console.log(error))
+    .catch(error => this.force_out())
 
     // users
     await this.$apollo.query({query: USER_ALL, variables: {page: 1}})
     .then((res: any) => this.userUpsert(res.data.users))
-    .catch(error => console.log(error))
+    .catch(error => this.force_out())
   }
 
   async mounted()
@@ -139,7 +130,7 @@ export default class Header extends Vue
       next: (data: any) => {
         this.messageUpsert(data.data.messageUpsert)
       },
-      error: (error: any) => console.log(error)
+      error: (error: any) => this.force_out()
     })
     
     const conversationSubscribe = this.$apollo.subscribe({query: CONVERSATION_SUBSCRIPTION})
@@ -147,7 +138,7 @@ export default class Header extends Vue
       next: (data: any) => {
         this.conversationUpsert(data.data.conversationUpsert)
       },
-      error: (error: any) => console.log(error)
+      error: (error: any) => this.force_out()
     })
   }
 
@@ -160,12 +151,14 @@ export default class Header extends Vue
   {
     return await axios
     .post(`${process.env.VUE_APP_API_URL}/api/auth/logout`, {}, {"headers": {"Authorization": `Bearer ${window.localStorage.getItem('token')}`}})
-    .then(res => 
-    {
-      window.localStorage.clear()
-      this.$router.push({ path: '/' })
-    })
-    .catch(error => console.log(error))
+    .then(res => this.force_out())
+    .catch(error => this.force_out())
+  }
+
+  force_out()
+  {
+    window.localStorage.clear()
+    this.$router.push({ path: '/' })
   }
 }
 </script>

@@ -45,3 +45,11 @@ export const USER_UPDATE = gql(`mutation ($id: ID!, $birth_date: Date!, $about_m
     id
   }
 }`)
+
+export const ME_ID = gql(`query
+{
+  me
+  {
+    id
+  }
+}`)
