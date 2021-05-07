@@ -16,7 +16,7 @@ div(class="container-fluid")
 					</div>
 				</div>
 				<ul class="collection">
-					<li v-for="conversation in conversations" @click="select(conversation.id, conversation.friend_id.id)" :class="['collection-item', 'avatar', {'active': init == conversation.id}]">
+					<li v-for="conversation in conversations" @click="select(conversation.id, conversation.friend_id.id)" :class="['collection-item', 'avatar', {'active': init == conversation.id}]" v-if="conversation.friend_id.id != me_id">
 							<img src="img/user.jpg" alt="" class="circle">
 							<span class="title truncate">{{ conversation.friend_id.name }}</span>
 							<p class="truncate">Hi, my name is Carlos Swift, i need a please</p>

@@ -7,6 +7,26 @@ export const USER_ALL = gql(`query
     id
     name
     lastname
+    birth_date
+    about_me
+    gender_id
+    {
+      name
+    }
+    relationship_id
+    {
+      name
+    }
+    wish_id
+    {
+      name
+    }
+    city_id
+    {
+      name
+    }
+    created_at
+    updated_at
   }
 }`)
 
@@ -23,16 +43,5 @@ export const USER_UPDATE = gql(`mutation ($id: ID!, $birth_date: Date!, $about_m
   })
   {
     id
-    name
-    lastname
-    email
-    birth_date
-    about_me
-    gender_id
-    relationship_id
-    wish_id
-    city_id
-    created_at
-    updated_at
   }
 }`)
