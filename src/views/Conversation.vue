@@ -54,7 +54,7 @@ div(class="container-fluid")
 					</form>
 				</div>
 			</div>
-			<div class="no_msj" style="height: 100%;" v-if="!conversations.length">
+			<div class="no_msj" style="height: 100%;" v-if="!conversations.length && auth">
 				<img v-if="auth.photos.length" :src="auth.photos[0].url">
 				<img v-if="!auth.photos.length && auth.gender_id.id == 1" src="/img/profile_male.jpg">
 				<img v-if="!auth.photos.length && auth.gender_id.id == 2" src="/img/profile_female.jpg">
