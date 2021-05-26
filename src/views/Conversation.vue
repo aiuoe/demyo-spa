@@ -1,8 +1,7 @@
 <template lang="pug">
 div(class="container-fluid")
 	Header
-	span(v-if="!conversations.length") no hay conversaciones para mostrar
-	<main class="container section" v-if="conversations.length">
+	<main class="container section">
 		<div class="row card_message">
 			<div class="col s12 m4 box_1">
 				<div class="box_title_user">
@@ -15,7 +14,7 @@ div(class="container-fluid")
 						</div>
 					</div>
 				</div>
-				<ul class="collection">
+				<ul class="collection" v-if="conversations.length">
 					<li v-for="conversation in conversations" @click="select(conversation.id, conversation.friend_id.id)" :class="['collection-item', 'avatar', {'active': init == conversation.id}]" v-if="conversation.friend_id.id != me_id">
 							<img v-if="conversation.friend_id.photos.length" :src="conversation.friend_id.photos[0].url" class="circle">
 							<span class="title truncate">{{ conversation.friend_id.name }}</span>
@@ -23,35 +22,44 @@ div(class="container-fluid")
 					</li>
 				</ul>
 			</div>
-			<div class="col s12 m8 box_2">
-				<div class="box_title_msj">
-					<div class="name">
-						<span v-if="friend">{{ friend.friend_id.name }}</span>
-						<div class="status green"></div>
+			<div class="col s12 m8 box_2" v-if="conversations.length">
+				<div style="width: 100%;">
+					<div class="box_title_msj">
+						<div class="name">
+							<span v-if="friend">{{ friend.friend_id.name }}</span>
+							<div class="status green"></div>
+						</div>
+						<a class="tools">
+							<i class="material-icons">info_outline</i>
+						</a>
 					</div>
-					<a class="tools">
-						<i class="material-icons">info_outline</i>
-					</a>
+					<ul class="box_text_msj">
+						<li v-for="message in messages" class="chat_item">
+							<p v-if="message.user_id.id == me_id" class="user">{{ message.message }}</p>
+							<p v-else >{{ message.message }}</p>
+						</li>
+					</ul>
+					<form @submit.prevent="store" class="box_chat_msj">
+						<div class="box_input">
+							<div class="item1">
+								<i class="material-icons">sentiment_very_satisfied</i>
+							</div>
+							<div class="item2">
+								<input v-model="message" type="text" placeholder="Послать сообщение...">
+							</div>
+							<button type="submit" class="item3">
+								<i class="material-icons">send</i>
+							</button>
+						</div>
+					</form>
 				</div>
-				<ul class="box_text_msj">
-					<li v-for="message in messages" class="chat_item">
-						<p v-if="message.user_id.id == me_id" class="user">{{ message.message }}</p>
-						<p v-else >{{ message.message }}</p>
-					</li>
-				</ul>
-				<form @submit.prevent="store" class="box_chat_msj">
-					<div class="box_input">
-						<div class="item1">
-							<i class="material-icons">sentiment_very_satisfied</i>
-						</div>
-						<div class="item2">
-							<input v-model="message" type="text" placeholder="Послать сообщение...">
-						</div>
-						<button type="submit" class="item3">
-							<i class="material-icons">send</i>
-						</button>
-					</div>
-				</form>
+			</div>
+			<div class="no_msj" style="height: 100%;" v-if="!conversations.length">
+				<img src="img/user.jpg" alt="">
+				<div class="no_msj_text">
+					<h6>Привет, <span>Samuels</span>!</h6>
+					<p>Пожалуйста, выберите чат, чтобы начать обмен сообщениями.</p>
+				</div>
 			</div>
 		</div>
 	</main>
@@ -152,6 +160,48 @@ export default class Conversation extends Vue
 	overflow-x: hidden;
 }
 
+.box_2
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+.no_msj
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.no_msj_text
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.no_msj img
+{
+	border-radius: 50%;
+	width: 65px;
+	height: 65px;
+}
+
+.no_msj h6
+{
+	font-size: 1.15rem;
+}
+
+.no_msj p
+{
+	font-size: 1rem;
+	margin: 0;
+}
+
 .card_message
 {
 	height: 77vh;
@@ -198,8 +248,8 @@ input[type=text]:not(.browser-default):focus:not([readonly])
 	justify-content: center;
 	align-items: center;
 	padding: 0 0.9rem 0 0.6rem;
-	border-radius: 20px;
-	background: #dedede;
+	border-radius: 5px;
+	background: #ededed;
 }
 
 .box_1 .box_title_user .search .item_1
@@ -459,7 +509,6 @@ ul.box_text_msj
 	.container-fluid
 	{
 		overflow-y: hidden;
-		background: #fafafa;
 	}
 
 	.card_message

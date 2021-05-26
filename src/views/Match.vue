@@ -247,7 +247,7 @@ export default class Match extends Vue
 {
 	width: 100%;
 	height: 100%;
-	border-radius: 6px 6px 0px 0px;
+	border-radius: 0.25rem 0.25rem 0px 0px;
 }
 
 .btn-floating.halfway-fab 
@@ -477,7 +477,7 @@ export default class Match extends Vue
 
 	.image img
 	{
-		border-radius: 6px 0px 0px 6px;
+		border-radius: 0.25rem 0px 0px 0.25rem;
 	}
 
 	.btn-floating.halfway-fab 

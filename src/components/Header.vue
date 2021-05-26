@@ -341,7 +341,7 @@ header
     opacity: 1
     display: block
     top: 70px
-    left: 83%
+    left: 87%
 
 @media screen and (min-width: 1440px)
   .main_nav .nav_item span

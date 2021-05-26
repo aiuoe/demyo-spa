@@ -84,7 +84,10 @@ export default class Photo extends Vue
 					'Authorization': `Bearer ${window.localStorage.getItem('token')}`
 				}
 		})
-		.then((res: any) => this.$router.push({path: 'match'}).catch((error: any) => error))
+		.then((res: any) => {
+			this.$router.push({path: 'match'}).catch((error: any) => error)
+			location.reload()
+		})
 		.catch((error: any) => console.log(error))	
 	}
 }

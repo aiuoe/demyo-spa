@@ -5,6 +5,7 @@ body
 	user-select: none;
   flex-direction: column;
   overflow-x: hidden;
+  background: #edf2f8;
 }
 
 body::-webkit-scrollbar 
@@ -53,7 +54,7 @@ main
 
 .b__radius
 {
-	border-radius: 6px;
+	border-radius: 0.25rem;
 }
 
 .status
