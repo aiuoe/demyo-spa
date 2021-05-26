@@ -55,9 +55,14 @@ div(class="container-fluid")
 				</div>
 			</div>
 			<div class="no_msj" style="height: 100%;" v-if="!conversations.length">
-				<img src="img/user.jpg" alt="">
+				<img v-if="auth.photos.length" :src="auth.photos[0].url">
+				<img v-if="!auth.photos.length && auth.gender_id.id == 1" src="/img/profile_male.jpg">
+				<img v-if="!auth.photos.length && auth.gender_id.id == 2" src="/img/profile_female.jpg">
+				<img v-if="!auth.photos.length && auth.gender_id.id == 3" src="/img/profile_female.jpg">
+				<img v-if="!auth.photos.length && auth.gender_id.id == 4" src="/img/profile_female.jpg">
+				<img v-if="!auth.photos.length && auth.gender_id.id == 5" src="/img/profile_female.jpg">
 				<div class="no_msj_text">
-					<h6>Привет, <span>Samuels</span>!</h6>
+					<h6>Привет, <span>{{ auth.name }}</span>!</h6>
 					<p>Пожалуйста, выберите чат, чтобы начать обмен сообщениями.</p>
 				</div>
 			</div>
@@ -93,6 +98,11 @@ export default class Conversation extends Vue
 	friend_id: number = 0
 	id: number = 0
 	init: number = 0
+
+	get auth()
+	{
+		return this.$store.state.users_all.get(this.$store.state.me_id)
+	}
 
 	async mounted()
 	{
