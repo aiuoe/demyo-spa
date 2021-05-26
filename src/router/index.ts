@@ -2,8 +2,6 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
-// import Home from '../views/Home.vue'
-import Dashboard from '../views/Dashboard.vue'
 import Conversation from '../views/Conversation.vue'
 import Profile from '../views/Profile.vue'
 import Search from '../views/Search.vue'
@@ -31,14 +29,6 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: Dashboard,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
     path: '/conversations',
     name: 'conversations',
     component: Conversation,
@@ -47,17 +37,10 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: '/profile',
+    path: '/profile/:id',
     name: 'profile',
     component: Profile,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/notifications',
-    name: 'notification',
-    component: Conversation,
+    props: true,
     meta: {
       requiresAuth: true
     }

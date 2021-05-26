@@ -5,17 +5,17 @@ header(class="navbar-fixed")
       a(href="#!" class="brand-logo left") SwingRU
       ul(class="right hide-on-small-only" v-if="nav")
         li
-          router-link(to="match")
+          router-link(to="/match")
             i(class="material-icons") favorite_border
         li
-          router-link(to="conversations")
+          router-link(to="/conversations")
             i(class="material-icons") mail_outline
         li
-          router-link(to="search")
+          router-link(to="/search")
             i(class="material-icons") place
 
         li
-          router-link(to="notifications")
+          a(@click="show_notify = !show_notify")
             i(class="material-icons") notifications_none
         li
           a(@click="show" class="dropdown-trigger valign-wrapper" data-target="dropdown1")
@@ -23,7 +23,7 @@ header(class="navbar-fixed")
             i(class="material-icons") arrow_drop_down
           ul(id="dropdown1" class="dropdown-content b__radius" v-show="dropdown")
             li
-              a(href="profile.php" class="grey-text text-darken-2")
+              router-link(:to="{name: 'profile', params: { id: me_id}}" class="grey-text text-darken-2")
                 i(class="material-icons left") account_circle
                 span профиль
             li
@@ -39,11 +39,12 @@ header(class="navbar-fixed")
               a(@click="logout" class="grey-text text-darken-2")
                 i(class="material-icons") power_settings_new
                 span выйти  
+  Notifications(v-if="show_notify")
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 // queries and mutations
 import { CONVERSATION_ALL } from '@/graphql/conversation'
 import { CONVERSATION_SUBSCRIPTION } from '@/graphql/conversation'
@@ -51,7 +52,9 @@ import { MESSAGE_ALL } from '@/graphql/message'
 import { MESSAGE_SUBSCRIPTION } from '@/graphql/message'
 import { FRIEND_ALL } from '@/graphql/friend'
 import { FRIEND_REQUEST_ALL } from '@/graphql/friend'
-import { USER_ALL, ME_ID } from '@/graphql/user'
+import { NOTIFICATION_SUBSCRIPTION, NOTIFICATION_ALL } from '@/graphql/notification'
+import { USER_ALL, ME_ID, USER_EVERY } from '@/graphql/user'
+import Notifications from '@/components/Notifications.vue'
 
 // others
 import gql from 'graphql-tag'
@@ -59,15 +62,22 @@ import axios from 'axios'
 import '@/modules/array'
 
 @Component({
+  components: { Notifications },
+  computed: 
+  {
+    ...mapGetters(['me_id'])
+  },
   methods:
   {
     ...mapActions([
       'meSet', 
       'friendUpsert', 
       'messageUpsert', 
+      'notificationUpsert', 
       'conversationUpsert', 
       'friendRequestUpsert',
-      'userUpsert'
+      'userUpsert',
+      'userAllUpsert'
     ])
   }
 })
@@ -77,11 +87,14 @@ export default class Header extends Vue
   meSet!: (value: number) => void
   conversationUpsert!: (value: any) => void
   messageUpsert!: (value: any) => void
+  notificationUpsert!: (value: any) => void
   friendUpsert!: (value: any) => void
   friendRequestUpsert!: (value: any) => void
   userUpsert!: (value: any) => void
+  userAllUpsert!: (value: any) => void
   dropdown: boolean = false
   nav: boolean = true
+  show_notify: boolean = false
 
   show()
   {
@@ -107,6 +120,11 @@ export default class Header extends Vue
     .then((res: any) => this.messageUpsert(res.data.messages))
     .catch(error => this.force_out())
 
+    // notifications
+    await this.$apollo.query({query: NOTIFICATION_ALL})
+    .then((res: any) => this.notificationUpsert(res.data.notifications))
+    .catch(error => this.force_out())
+
     // friends
     await this.$apollo.query({query: FRIEND_ALL, variables: {page: 1}})
     .then((res: any) => this.friendUpsert(res.data.friends))
@@ -120,6 +138,10 @@ export default class Header extends Vue
     // users
     await this.$apollo.query({query: USER_ALL, variables: {page: 1}})
     .then((res: any) => this.userUpsert(res.data.users))
+    .catch(error => this.force_out())
+
+    await this.$apollo.query({query: USER_EVERY})
+    .then((res: any) => this.userAllUpsert(res.data.users_all))
     .catch(error => this.force_out())
   }
 
@@ -140,11 +162,21 @@ export default class Header extends Vue
       },
       error: (error: any) => this.force_out()
     })
+
+    const notificationSubscribe = this.$apollo.subscribe({query: NOTIFICATION_SUBSCRIPTION})
+    notificationSubscribe.subscribe({
+      next: (data: any) => {
+        this.notificationUpsert(data.data.notificationSubscription)
+      },
+      error: (error: any) => this.force_out()
+    })
   }
 
   router(path: string)
   {
-    this.$router.push({path: path}).catch(err => err)
+    this.$router
+    .push({path: path})
+    .catch(err => err)
   }
 
   async logout()
@@ -159,6 +191,7 @@ export default class Header extends Vue
   {
     window.localStorage.clear()
     this.$router.push({ path: '/' })
+    location.reload()
   }
 }
 </script>
@@ -169,7 +202,7 @@ export default class Header extends Vue
   opacity: 1
   display: block
   top: 70px
-  left: 68vw
+  left: 78%
 
 header
   width: 100vw
@@ -272,19 +305,26 @@ header
 
   .main_nav .nav_item:hover
     color: #fff
-    background-color: rgba(236, 47, 75, .93)
+    background-color: #3A73B8
     transition: background-color 0.1s ease-out
     box-shadow: 0px 0px 2px 1px rgba(0,0,0, .15)
 
   .active
     color: #fff
-    background-color: rgba(236, 47, 75, .93)
+    background-color: #3A73B8
     box-shadow: 0px 0px 2px 1px rgba(0,0,0, .15)
 
   .main_nav .nav_item span
     display: none
 
-@media screen and (min-width: 1034px)
+  #dropdown1
+    width: 100px
+    opacity: 1
+    display: block
+    top: 70px
+    left: 78%
+
+@media screen and (min-width: 1024px)
   .main_nav .nav_item span
     display: flex
     font-size: 1rem
@@ -295,4 +335,30 @@ header
   .main_nav .nav_item
     width: auto
     padding: 0.8rem 0.8rem
+
+  #dropdown1
+    width: 100px
+    opacity: 1
+    display: block
+    top: 70px
+    left: 83%
+
+@media screen and (min-width: 1440px)
+  .main_nav .nav_item span
+    display: flex
+    font-size: 1rem
+
+  .main_nav .nav_item i
+    margin-right: 0.4rem
+
+  .main_nav .nav_item
+    width: auto
+    padding: 0.8rem 0.8rem
+    
+  #dropdown1
+    width: 100px
+    opacity: 1
+    display: block
+    top: 70px
+    left: 88%
 </style>

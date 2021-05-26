@@ -6,6 +6,8 @@ interface Array<T>
 	where(key: string, operator: string, value: string): any
 	get(id: number): any
 	paginate(page: number, max: number): any
+	next(id: number): any
+	previous(id: number): any
 }
 
 Array.prototype.upsert = function (item: any): any
@@ -71,4 +73,16 @@ Array.prototype.paginate = function (page: number, max: number = 5): any
 		return this.slice(index, index + max)
 	else
 		return this.slice(last, index + max)	
+}
+
+Array.prototype.next = function (id: number): any
+{ 
+	let index = this.findIndex(i => i.id == id)
+	return this[index + 1] 
+}
+
+Array.prototype.previous = function (id: number): any
+{ 
+	let index = this.findIndex(i => i.id == id)
+	return this[index - 1] 
 }

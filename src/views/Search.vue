@@ -1,8 +1,8 @@
 <template lang="pug">
 div(class="container-fluid")
 	Header
-	span(v-if="!user_all.length") no hay usuarios para mostrar
-	<main class="container" v-if="user_all.length">
+	span(v-if="!user_every.length") no hay usuarios para mostrar
+	<main class="container" v-if="user_every.length">
 		<div class="row section">
 			<div class="card b__radius">
 				<div class="card-content card_center">
@@ -27,8 +27,13 @@ div(class="container-fluid")
 				<div class="card-content setting" id="setting"></div>
 				<div class="card-content box_users">
 					<ul class="row content__img">
-						<li v-for="user in user_all" class="col s12 m4 l3">
-							<img class="responsive-img b__radius" src="img/user.jpg" alt="">
+						<li v-for="user in user_every" v-if="user.id != me_id" class="col s12 m4 l3" @click="route(user.id)">
+							<img v-if="user.photos.length" class="responsive-img b__radius" :src="user.photos[0].url" alt="">
+							<img v-if="!user.photos.length && user.gender_id.id == 1" class="responsive-img b__radius" src="/img/profile_male.jpg">
+							<img v-if="!user.photos.length && user.gender_id.id == 2" class="responsive-img b__radius" src="/img/profile_female.jpg">
+							<img v-if="!user.photos.length && user.gender_id.id == 3" class="responsive-img b__radius" src="/img/profile_female.jpg">
+							<img v-if="!user.photos.length && user.gender_id.id == 4" class="responsive-img b__radius" src="/img/profile_female.jpg">
+							<img v-if="!user.photos.length && user.gender_id.id == 5" class="responsive-img b__radius" src="/img/profile_female.jpg">
 							<a href="#" class="data">
 								<div class="data_title">
 									<span class="title"> {{ user.name | extract(10) }}</span>
@@ -60,7 +65,7 @@ declare const M: any;
 	filters: {capitalize: capitalize, extract: extract, upperCase: upperCase, age: age},
 	computed: 
 	{
-		...mapGetters(['me_id', 'user_all'])
+		...mapGetters(['me_id', 'user_every'])
 	}
 })
 export default class Login extends Vue 
@@ -69,9 +74,15 @@ export default class Login extends Vue
 
 	select()
 	{
-		console.log(this.$refs)
+		// this.$refs
 	}
 
+	route(id: any)
+	{
+		this.$router
+		.push({name: 'profile', params: {id: id}})
+		.catch(err => console.log(err))
+	}
 
 	async mounted()
 	{
@@ -82,7 +93,7 @@ export default class Login extends Vue
 
 	async updated()
 	{
-		console.log(this.selection)
+		// console.log(this.selection)
 	}
 }
 </script>

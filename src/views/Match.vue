@@ -4,20 +4,25 @@ div(class="container-fluid")
 	span(v-if="!users.length") no hay usuarios para mostrar
 	<main class="container section" v-if="users.length">
 		<div class="row">
-			<div class="col s12 m10 l11 card left b__radius">
+			<div class="col s12 m10 l11 card left b__radius" v-if="user">
 				<div class="col s12 m7 l7 image">
-					<img src="img/user.jpg" alt="user">
-					<a class="btn-floating halfway-fab waves-effect waves-light blue">
+					<img v-if="user.photos.length" :src="user.photos[0].url">
+					<img v-if="!user.photos.length && user.gender_id.id == 1" src="/img/profile_male.jpg">
+					<img v-if="!user.photos.length && user.gender_id.id == 2" src="/img/profile_female.jpg">
+					<img v-if="!user.photos.length && user.gender_id.id == 3" src="/img/profile_female.jpg">
+					<img v-if="!user.photos.length && user.gender_id.id == 4" src="/img/profile_female.jpg">
+					<img v-if="!user.photos.length && user.gender_id.id == 5" src="/img/profile_female.jpg">
+					<a @click="router" class="btn-floating halfway-fab waves-effect waves-light blue">
 						<i class="material-icons">visibility</i>
 					</a>
-					<a class="btn-floating halfway-fab waves-effect waves-light red darken-2 left">
+					<a @click="previous" class="btn-floating halfway-fab waves-effect waves-light red darken-2 left">
 						<i class="material-icons">replay</i>
 					</a>
 					<div class="botons">
 						<a @click="send" class="btn waves-effect waves-gray">
 							<i class="material-icons red-text text-darken-1">favorite</i></a>
 						</a>
-						<a @click="close" class="btn waves-effect waves-gray">
+						<a @click="next" class="btn waves-effect waves-gray">
 							<i class="material-icons grey-text">close</i></a>
 						</a>
 					</div>
@@ -60,17 +65,21 @@ div(class="container-fluid")
 						</div>
 						<span>{{ user.wish_id.name }}</span>
 					</li>
-					
 				</ul>
 			</div>
 			<div class="col s1 m2 l1 users hide-on-small-only center-column">
-				<ul>
+				<ul class="list-users">
 					<li v-for="user in users" v-if="user.id != me_id" @click="select(user.id)" :class="['item--user', {'active': init == user.id}]">
-						<img src="https://randomuser.me/api/portraits/women/67.jpg" alt="user">
+						<img v-if="user.photos.length" :src="user.photos[0].url" alt="user">
+						<img v-if="!user.photos.length && user.gender_id.id == 1" src="img/profile_male.jpg">
+						<img v-if="!user.photos.length && user.gender_id.id == 2" src="img/profile_female.jpg">
+						<img v-if="!user.photos.length && user.gender_id.id == 3" src="img/profile_female.jpg">
+						<img v-if="!user.photos.length && user.gender_id.id == 4" src="img/profile_female.jpg">
+						<img v-if="!user.photos.length && user.gender_id.id == 5" src="img/profile_female.jpg">
 					</li>
 				</ul>
-				a(@click="next" class="link")
-					i(class="material-icons red-text text-darken-1") arrow_downward
+				//- a(@click="next" class="link")
+				//- 	i(class="material-icons red-text text-darken-1") arrow_downward
 			</div>
 		</div>
 	</main>
@@ -83,98 +92,108 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { age } from '@/modules/filter'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import { FRIEND_REQUEST_SEND, FRIEND_REQUEST_ACCEPT } from '@/graphql/friend'
+import { FRIEND_UPSERT } from '@/graphql/friend'
 import '@/modules/array'
+
+declare const M: any;
 
 @Component({
 	components: { Header, Footer },
 	filters: {age: age},
-	methods:
-	{
-		...mapActions(['pageSet'])
-	},
 	computed: 
 	{
-		...mapGetters(['me_id', 'users'])
+		...mapGetters(['me_id'])
 	}
 })
 export default class Match extends Vue 
 {
-	pageSet!: (value: number) => void
 	user: any = null
-	page: number = 1
 	init: number = 0
-
-	@Watch('users', {immediate: true})
-	usersOnChange()
-	{
-		if (this.$store.state.users.length)
-		{
-			this.user = this.$store.state.users[0]
-			this.init = this.user.id
-		}
-	}
-
-	next()
-	{
-		this.pageSet((this.$store.state.page + 1))
-	}
 
 	async send()
 	{
 		await this.$apollo.mutate({
-			mutation: FRIEND_REQUEST_SEND,
+			mutation: FRIEND_UPSERT,
 			variables: {
-				friend_id: this.user.id
+				id: this.user.id
 			}
 		})
 		.then(res => 
 		{
-			this.$store.state.users
-			.delete(this.user.id)
+			M.toast({html: res.data.friendUpsert, classes: 'red darken-3'})
+
+			do
+			{
+				let next = this.users.next(this.user.id)
+		
+				if (next)
+					this.user = next
+		
+			}while(this.user.id == this.$store.state.me_id)	
 		})
-		.catch(err => console.log(err))
+		.catch(error => error)
 	}
 
-	close()
+	previous()
 	{
-		this.$store.state.users
-		.delete(this.user.id)
+		do
+		{
+			let previous = this.users.previous(this.user.id)
+	
+			if (previous)
+				this.user = previous
+	
+		}while(this.user.id == this.$store.state.me_id)		
+		document.querySelector('.list-users')!.scrollTop -= 75
 	}
 
-	async accept(id: number)
+	next()
 	{
-		this.$apollo.mutate({
-			mutation: FRIEND_REQUEST_ACCEPT,
-			variables: {
-				id: id
-			}
-		})
-		.then(res => console.log(res))
-		.catch(err => console.log(err))
+		do
+		{
+			let next = this.users.next(this.user.id)
+	
+			if (next)
+				this.user = next
+	
+		}while(this.user.id == this.$store.state.me_id)
+
+		document.querySelector('.list-users')!.scrollTop += 70
 	}
 
 	async mounted()
 	{
-		if (this.$store.state.users.length && this.user == null)
-		{
-			this.user = this.$store.state.users[0]
+		if (this.user == null)
+			this.user = this.users[0]
+	
+		if (this.user)
 			this.init = this.user.id
-		}
 	}
 
 	async updated()
 	{
-		if (this.$store.state.users.length && this.user == null)
-		{
-			this.user = this.$store.state.users[0]
+		if (this.user == null)
+			this.user = this.users[0]
+	
+		if (this.user)
 			this.init = this.user.id
-		}
+	}
+
+	get users()
+	{
+		return this.$store.state.users_all.filter((u: any) => u.id != this.$store.state.me_id)
+	}
+
+	router()
+	{
+		this.$router
+		.push({name: 'profile', params: {id: this.user.id}})
+		.catch(err => err)
 	}
 
 	select(id: number)
 	{
-		this.user = this.$store.state.users.get(id)
+		this.user = this.users.get(id)
 		this.init = id
 	}
 }
@@ -285,6 +304,7 @@ export default class Match extends Vue
 	align-items: center;
 	margin-bottom: 0.55rem;
 	border-radius: 50%;
+	cursor: pointer;
 }
 
 .users .active
@@ -373,7 +393,8 @@ export default class Match extends Vue
 	display: none;
 }
 
-@media only screen and (min-width: 602px){
+@media only screen and (min-width: 602px)
+{
 	.card
 	{
 		height: 55vh;
@@ -402,10 +423,51 @@ export default class Match extends Vue
 	}
 }
 
-@media only screen and (min-width: 768px){
+@media only screen and (min-width: 768px)
+{
+	.row
+	{
+		width: 100%;
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+	}
+
 	.card
 	{
+		width: 92% !important;
 		height: 562px;
+	}
+
+	.users
+	{
+		width: 6% !important;
+		height: 576px;
+	}
+
+	.users .list-users
+	{
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		overflow-y: scroll;
+		padding: 10px 5px;
+		box-sizing: border-box;
+	}
+
+	.users .list-users::-webkit-scrollbar 
+	{
+		width: 0px;
+	}
+
+	.users .list-users .item--user
+	{
+		width: 60px;
+		height: 60px;
+		min-height: 60px;
+		border-radius: 50%;
 	}
 
 	.image

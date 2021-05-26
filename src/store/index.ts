@@ -13,6 +13,8 @@ export default new Vuex.Store({
 		friends: new Array<any>(),
 		friendRequests: new Array<any>(),
 		users: new Array<any>(),
+		users_all: new Array<any>(),
+		notifications: new Array<any>(),
 		page: 1,
 	},
 	getters: {
@@ -54,14 +56,17 @@ export default new Vuex.Store({
 		},
 		users: state =>
 		{
-			return state.users
+			return state.users_all
 			.filter((u: any) => u.id != state.me_id)
-			.paginate(state.page, 5)
 		},
-		user_all: state =>
+		users_all: state =>
 		{
-			return state.users
+			return state.users_all
 			.filter((u: any) => u.id != state.me_id)
+		},
+		user_every: state =>
+		{
+			return state.users_all
 		}
 	},
 	mutations: {
@@ -105,7 +110,21 @@ export default new Vuex.Store({
 				state.users = value
 			else if (state.users.length && Array.isArray(value) === false)
 				state.users.upsert(value)
-		}
+		},
+		userAllUpsert(state, value)
+		{
+			if (state.users_all.length === 0 && Array.isArray(value))
+				state.users_all = value
+			else if (state.users_all.length && Array.isArray(value) === false)
+				state.users_all.upsert(value)
+		},
+		notificationUpsert(state, value: any)
+		{
+			if (state.notifications.length === 0 && Array.isArray(value))
+				state.notifications = value
+			else if (Array.isArray(value) === false)
+				state.notifications.upsert(value)
+		},
 	},
 	actions: {
 		async meSet({commit}, value)
@@ -139,7 +158,15 @@ export default new Vuex.Store({
 		async userUpsert({commit}, value)
 		{
 			commit('userUpsert', value)
-		}
+		},
+		async userAllUpsert({commit}, value)
+		{
+			commit('userAllUpsert', value)
+		},
+		async notificationUpsert({commit}, value)
+		{
+			commit('notificationUpsert', value)
+		},
 	},
 	modules: {
 	}

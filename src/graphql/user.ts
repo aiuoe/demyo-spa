@@ -1,5 +1,45 @@
 import gql from 'graphql-tag';
 
+export const USER_EVERY = gql(`query
+{
+  users_all
+  {
+    id
+    name
+    lastname
+    email
+    birth_date
+    about_me
+    gender_id
+    {
+      id
+      name
+    }
+    relationship_id
+    {
+      id
+      name
+    }
+    wish_id
+    {
+      id
+      name
+    }
+    city_id
+    {
+      id
+      name
+    }
+    created_at
+    updated_at
+    photos
+    {
+      id
+      url
+    }
+  }
+}`)
+
 export const USER_ALL = gql(`query 
 {
   users
@@ -24,6 +64,11 @@ export const USER_ALL = gql(`query
     city_id
     {
       name
+    }
+    photos
+    {
+      id
+      url
     }
     created_at
     updated_at

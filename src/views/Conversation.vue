@@ -17,7 +17,7 @@ div(class="container-fluid")
 				</div>
 				<ul class="collection">
 					<li v-for="conversation in conversations" @click="select(conversation.id, conversation.friend_id.id)" :class="['collection-item', 'avatar', {'active': init == conversation.id}]" v-if="conversation.friend_id.id != me_id">
-							<img src="img/user.jpg" alt="" class="circle">
+							<img v-if="conversation.friend_id.photos.length" :src="conversation.friend_id.photos[0].url" class="circle">
 							<span class="title truncate">{{ conversation.friend_id.name }}</span>
 							<p class="truncate">Hi, my name is Carlos Swift, i need a please</p>
 					</li>
@@ -158,6 +158,14 @@ export default class Conversation extends Vue
 	background: #fff;
 	border: 1px solid #dbdbdb;
 	border-radius: 3px;
+}
+
+input:not([type]):focus:not([readonly]),
+input[type=text]:not(.browser-default):focus:not([readonly])
+{
+  border-bottom: 0px solid #26a69a;
+  -webkit-box-shadow: 0 0px 0 0 #26a69a;
+          box-shadow: 0 0px 0 0 #26a69a;
 }
 
 .row .col

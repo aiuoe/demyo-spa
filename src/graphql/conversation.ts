@@ -11,6 +11,11 @@ conversations($page: Int!)
       id
       name
       lastname
+      photos
+      {
+        id
+        url
+      }
     }
   }
 }`)
