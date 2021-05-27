@@ -19,7 +19,7 @@ messages($page: Int!)
   }
 }`)
 
-export const MESSAGE_UPSERT = gql(`mutation($id: ID! $friend_id: ID! $message: String)
+export const MESSAGE_UPSERT = gql(`mutation($id: ID! $friend_id: ID! $message: String!)
 {
   messageUpsert(input: {
     id: $id
