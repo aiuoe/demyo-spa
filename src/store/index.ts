@@ -86,14 +86,14 @@ export default new Vuex.Store({
 		{
 			if (state.conversations.length === 0 && Array.isArray(value))
 				state.conversations = value
-			else if (state.conversations.length && Array.isArray(value) === false)
+			else if (Array.isArray(value) === false)
 				state.conversations.upsert(value)
 		},
 		messageUpsert(state, value: any)
 		{
 			if (state.messages.length === 0 && Array.isArray(value))
 				state.messages = value
-			else if (state.messages.length && Array.isArray(value) === false)
+			else if (Array.isArray(value) === false)
 				state.messages.upsert(value)
 		},
 		friendUpsert(state, value)
@@ -108,14 +108,14 @@ export default new Vuex.Store({
 		{
 			if (state.users.length === 0 && Array.isArray(value))
 				state.users = value
-			else if (state.users.length && Array.isArray(value) === false)
+			else if (Array.isArray(value) === false)
 				state.users.upsert(value)
 		},
 		userAllUpsert(state, value)
 		{
 			if (state.users_all.length === 0 && Array.isArray(value))
 				state.users_all = value
-			else if (state.users_all.length && Array.isArray(value) === false)
+			else if (Array.isArray(value) === false)
 				state.users_all.upsert(value)
 		},
 		notificationUpsert(state, value: any)

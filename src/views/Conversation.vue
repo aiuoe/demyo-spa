@@ -152,7 +152,7 @@ export default class Conversation extends Vue
 			this.$store.state.messages.upsert(res.data.messageUpsert)
 			this.message = ''
 		})
-		.catch(err => console.log(err))
+		.catch(err => err)
 	}
 
 }
