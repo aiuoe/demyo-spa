@@ -86,3 +86,9 @@ Array.prototype.previous = function (id: number): any
 	let index = this.findIndex(i => i.id == id)
 	return this[index - 1] 
 }
+
+// search(keyword: string)
+// {
+//   this.heroes = this.heroes
+//   .filter((i: any) => Object.keys(i).filter((p: any) => i[p].toString().includes(keyword)).length)
+// }
